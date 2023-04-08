@@ -1,7 +1,7 @@
 import discordChatGpt from "./access/discordChatGpt";
 import Controller from "./class/Controller";
-import htmlpage from "./access/htmlpage";
 import nextjscoder from "./access/nextjscoder";
+import htmlpage from './access/htmlpage';
 
 Controller.get("/", () => {
   return { status: "online" };
