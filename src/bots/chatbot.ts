@@ -33,7 +33,7 @@ async function chatbot() {
     const openai = new OpenAIApi(configuration);
     const response = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `${messageCreate.content}`,
+      prompt: `act like a comedian: response-me pls in português: ${messageCreate.content}`,
       temperature: 0.5,
       max_tokens: 2048,
     });
