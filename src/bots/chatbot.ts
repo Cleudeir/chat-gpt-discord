@@ -18,7 +18,7 @@ async function chatbot() {
   });
 
   bot.on("messageCreate", async (messageCreate) => {
-    console.log("message: ", messageCreate.content);
+    console.log("message: ", messageCreate.author.username, messageCreate.content);
     if (messageCreate.author.bot) {
 			return;
 		}
