@@ -1,8 +1,9 @@
 import environment from "../class/Environment";
 import { Configuration, OpenAIApi } from "openai";
 import {Client,  GatewayIntentBits } from "discord.js";
+import OpenAi from "../class/OpenAi";
 
-async function chatbot() {
+async function discordChatGpt() {
   const bot = new Client({
     intents: [
       GatewayIntentBits.Guilds,
@@ -12,7 +13,7 @@ async function chatbot() {
     ],
   });
   bot.login(environment.get("DISCORD_KEY"));
-  bot.on("ready", async (messageCreate) => {
+  bot.on("ready", async () => {
     console.log("✔️  Bot is initiate");
     bot.user?.setActivity("Listening");
   });
@@ -27,20 +28,12 @@ async function chatbot() {
 		if ( channelType === "dm") {
 			return;
 		}
-    const configuration = new Configuration({
-      apiKey: environment.get("GPT_KEY"),
-    });
-    const openai = new OpenAIApi(configuration);
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: `act like a comedian: response-me pls in português: ${messageCreate.content}`,
-      temperature: 0.5,
-      max_tokens: 2048,
-    });
-    console.log("response: ", response.data.choices[0].text);
-    await messageCreate.channel.send(`${response.data.choices[0].text}`)
+
+    const message = `act like a comedian: response-me pls in português: ${messageCreate.content}`
+    const response: string = await OpenAi.davinci_003(message)
+    await messageCreate.channel.send(response)
     
   });
 }
 
-export default chatbot;
+export default discordChatGpt;

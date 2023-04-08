@@ -1,6 +1,6 @@
 import environment from "../class/Environment";
 import { Configuration, OpenAIApi } from "openai";
-async function nextjspage(body: any) {
+async function nextjscoder(body: any) {
   const configuration = new Configuration({
     apiKey: environment.get("GPT_KEY"),
   });
@@ -18,4 +18,4 @@ async function nextjspage(body: any) {
   return response.data.choices[0].text
 }
 
-export default nextjspage;
+export default nextjscoder;
