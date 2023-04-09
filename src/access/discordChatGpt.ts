@@ -29,10 +29,13 @@ async function discordChatGpt() {
 			return;
 		}
 
-    const message = `act like a comedian: response-me pls in português: ${messageCreate.content}`
-    const response: string = await OpenAi.davinci_003(message)
-    await messageCreate.channel.send(response)
+    const personType = ["comedian", "sad", "intellectual"] 
+    const random = Math.floor(Math.random()*3)
+    console.log('random: ', random);
     
+    const message = `pls act like a ${personType[random]} person and response-me in português: ${messageCreate.content}`
+    const response: string = await OpenAi.turbo(message)
+    await messageCreate.channel.send(`${personType[random]} : ${response}`)    
   });
 }
 
