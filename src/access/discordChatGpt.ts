@@ -1,6 +1,5 @@
 import environment from "../class/Environment";
-import { Configuration, OpenAIApi } from "openai";
-import {Client,  GatewayIntentBits } from "discord.js";
+import { Client, GatewayIntentBits } from "discord.js";
 import OpenAi from "../class/OpenAi";
 
 async function discordChatGpt() {
@@ -19,23 +18,64 @@ async function discordChatGpt() {
   });
 
   bot.on("messageCreate", async (messageCreate) => {
-    console.log("message: ", messageCreate.author.username, messageCreate.content);
+    const time = Date.now();
+    const user = messageCreate.author.username;
+    const message = messageCreate.content.toLocaleLowerCase();
+    const channelType: string = messageCreate.channel.type as unknown as string;
+
+    console.log("message: ", user, message);
     if (messageCreate.author.bot) {
-			return;
-		}
+      return;
+    }    
+    if (channelType === "dm") {
+      return;
+    }
+    if (message === "!reset") {
+      await OpenAi.messagesReset(user);
+      await messageCreate.channel.send("Historic is empty");
+      return;
+    }
+    if (message.toLocaleLowerCase() === "!coder") {
+      await OpenAi.setContentDefault(
+        user,
+        `You are a coder assistant, use discord markdown to format your response, use code form when is a code, create and response fast`
+      );
+      await messageCreate.channel.send("I'm coder assistant");
+      return;
+    }
+    if (message.toLocaleLowerCase() === "!bug") {
+      await OpenAi.setContentDefault(
+        user,
+        `You are a coder assistant, use discord markdown to format your response, use code form when is a code, fix bug that code`);
+      await messageCreate.channel.send("I'm coder bugfix");
+      return;
+    }
 
-    const channelType : string = messageCreate.channel.type as unknown as string
-		if ( channelType === "dm") {
-			return;
-		}
-
-    const personType = ["comedian", "sad", "intellectual"] 
-    const random = Math.floor(Math.random()*3)
-    console.log('random: ', random);
-    
-    const message = `pls act like a ${personType[random]} person and response-me in português: ${messageCreate.content}`
-    const response: string = await OpenAi.turbo(message)
-    await messageCreate.channel.send(`${personType[random]} : ${response}`)    
+    if (message.startsWith("#")) {
+      const replaceMessage = message.replace("#", "");
+      console.log("replaceMessage: ", replaceMessage);
+      const result = await messageCreate.channel.send(
+        `Já respondo, em 30s ...`
+      );
+      const response: string = await OpenAi.turbo(user, replaceMessage);
+      await result.edit(`${response}`);
+      return console.log(
+        "Tempo para resposta: ",
+        (Date.now() - time) / 1000,
+        "s"
+      );
+    } else {
+      const result = await messageCreate.channel.send(
+        `Já respondo, em 5s ...`
+        );
+      const response: string = await OpenAi.davinci_003(message);
+      await result.edit(`${response}`);
+      return console.log(
+        "Tempo para resposta: ",
+        (Date.now() - time) / 1000,
+        "s"
+      );
+    }
   });
 }
 
