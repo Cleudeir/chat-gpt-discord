@@ -26,8 +26,40 @@ async function discordChatGpt() {
     console.log("message: ", user, message);
     if (messageCreate.author.bot) {
       return;
-    }    
+    }
     if (channelType === "dm") {
+      return;
+    }
+    if (message === "!help") {
+      await OpenAi.messagesReset(user);
+      await messageCreate.channel.send(`.
+      
+      **COMMANDS:**      
+      \`\`\`\
+      Chat manager:
+
+      !reset : Delete the Historic chat
+      \`\`\`\
+      
+      \`\`\`\
+      Chat configure behavior category:
+
+      !coder    : Transform chat like a coder assistant
+
+      !bug      : Transform chat like a coder bug fixer assistant
+
+      !default  : Normal chat bot
+      \`\`\`\
+      
+      
+      \`\`\`\
+      Chat types:
+
+      Fast chat without context : Write normal text
+
+      Slow Chat with context    : Write initial with "#"
+      \`\`\`\
+      `);
       return;
     }
     if (message === "!reset") {
@@ -46,8 +78,17 @@ async function discordChatGpt() {
     if (message.toLocaleLowerCase() === "!bug") {
       await OpenAi.setContentDefault(
         user,
-        `You are a coder assistant, use discord markdown to format your response, use code form when is a code, fix bug that code`);
+        `You are a coder assistant, use discord markdown to format your response, use code form when is a code, fix bug that code`
+      );
       await messageCreate.channel.send("I'm coder bugfix");
+      return;
+    }
+    if (message.toLocaleLowerCase() === "!default") {
+      await OpenAi.setContentDefault(
+        user,
+        `You are a helpful assistant inside discord, use discord markdown to format your response`
+      );
+      await messageCreate.channel.send("I'm normal chat");
       return;
     }
 
@@ -65,10 +106,8 @@ async function discordChatGpt() {
         "s"
       );
     } else {
-      const result = await messageCreate.channel.send(
-        `Já respondo, em 5s ...`
-        );
-      const response: string = await OpenAi.davinci_003(message);
+      const result = await messageCreate.channel.send(`Já respondo, em 5s ...`);
+      const response: string = await OpenAi.davinci_003(user, message);
       await result.edit(`${response}`);
       return console.log(
         "Tempo para resposta: ",

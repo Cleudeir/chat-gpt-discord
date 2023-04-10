@@ -4,7 +4,6 @@ import fsPromises from "fs/promises";
 import fs from "fs";
 class OpenAi {
   private openai: OpenAIApi;
-  private content: string;
 
   constructor() {
     this.openai = new OpenAIApi(
@@ -12,19 +11,16 @@ class OpenAi {
         apiKey: environment.get("GPT_KEY"),
       })
     );
-    this.content = `You are a helpful assistant inside discord, response fast and in Portuguese`
-
     this.tempDir();
   }
 
-  public async setContentDefault(user: string, roleDefine: string){
-    this.content = roleDefine
+  public async setContentDefault(user: string, roleDefine: string) {
     try {
       const stringify: string = JSON.stringify([
         {
-         role: "system",
-         content: roleDefine
-        }
+          role: "system",
+          content: roleDefine,
+        },
       ]);
       await fsPromises.writeFile(`temp/${user}.json`, stringify);
     } catch (error) {
@@ -47,10 +43,12 @@ class OpenAi {
       return read;
     } catch (error) {
       console.log("chat not exists");
-      return [{
-        role: "system",
-        content: this.content
-       }];
+      return [
+        {
+          role: "system",
+          content: `You are a helpful assistant inside discord, use discord markdown to format your response`,
+        },
+      ];
     }
   }
 
@@ -66,10 +64,14 @@ class OpenAi {
 
   public async messagesReset(user: string): Promise<void> {
     try {
-      const stringify: string = JSON.stringify([{
-       role: "system",
-       content: this.content
-      }]);
+      const [{ content }] = await this.messagesRead(user);
+      console.log("davinci_003", content);
+      const stringify: string = JSON.stringify([
+        {
+          role: "system",
+          content,
+        },
+      ]);
       await fsPromises.writeFile(`temp/${user}.json`, stringify);
     } catch (error) {
       console.log(error);
@@ -91,20 +93,22 @@ class OpenAi {
       await this.messagesWrite(user, messages);
       return result;
     } else {
-      const result: string = "Não consegui entender, repita por favor!";
+      const result: string = "don't understand, repeat pls!";
       return result;
     }
   }
 
   public async davinci_003(
+    user: string,
     message: string,
     temperature?: number,
     max_tokens?: number
   ): Promise<string> {
-    console.log("davinci_003", this.content);
+    const [{ content }] = await this.messagesRead(user);
+    console.log("davinci_003", content);
     const response = await this.openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `${this.content}: ${message}`,
+      prompt: `${content}: ${message}`,
       temperature: temperature || 0.4,
       max_tokens: max_tokens || 2048,
     });
@@ -113,7 +117,7 @@ class OpenAi {
       console.log(result);
       return result;
     } else {
-      const result: string = "Não consegui entender, repita por favor!";
+      const result: string = "don't understand, repeat pls";
       return result;
     }
   }
