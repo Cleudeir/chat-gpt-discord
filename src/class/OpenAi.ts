@@ -32,7 +32,7 @@ class OpenAi {
       const content = `You are a helpful assistant inside discord, use discord markdown to format your response`;
       const config : Config = {
         modelType: modelType.textDavinci003,
-        temperature: 0.4,
+        temperature: 0.8,
         max_tokens: 2048,
       };
       const messages : Messages = [

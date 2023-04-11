@@ -43,7 +43,7 @@ async function discordChatGpt() {
 
     } else if (data.config.modelType === modelType.textDavinci003) {
 
-      await result.edit(`Já respondo, em 5s ...`);
+      await result.edit(`Já respondo, em 15s ...`);
       const response: string = await OpenAi.withOutContext(message, data, modelType.textDavinci003);
       await result.edit(`${response}`);
       return console.log("Tempo para resposta: ", (Date.now() - time) / 1000, "s");
