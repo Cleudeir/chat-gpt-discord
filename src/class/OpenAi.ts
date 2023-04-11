@@ -2,7 +2,7 @@ import environment from "./Environment";
 import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "openai";
 import fsPromises from "fs/promises";
 import fs from "fs";
-import { Config, DataUser, MessageContent, Messages, modelType } from "../type";
+import { Config, DataUser, MessageContent, Messages, model, type } from "../type";
 
 class OpenAi {
   private openai: OpenAIApi;
@@ -31,9 +31,9 @@ class OpenAi {
       console.log("chat not exists");
       const content = `You are a helpful assistant inside discord, use discord markdown to format your response`;
       const config : Config = {
-        modelType: modelType.textDavinci003,
+        model: model.textDavinci003,
         temperature: 0.8,
-        max_tokens: 2048,
+        max_tokens: 2048
       };
       const messages : Messages = [
         {
@@ -55,11 +55,11 @@ class OpenAi {
     }
   }
 
-  public async context(user: string, message: MessageContent, data: DataUser, model: modelType): Promise<string> {
+  public async slow(user: string, message: MessageContent, data: DataUser): Promise<string> {
     console.log("gpt-3.5-turbo");
     data.messages.push({ role: ChatCompletionRequestMessageRoleEnum.User, content: `${message}` });
     const response = await this.openai.createChatCompletion({
-      model,
+      model: model.gptTurbo003,
       messages: data.messages,
     });
     const result: string | undefined = response?.data?.choices[0]?.message?.content;
@@ -73,12 +73,13 @@ class OpenAi {
     }
   }
 
-  public async withOutContext(message: MessageContent, data: DataUser, model: modelType): Promise<string> {
+  public async fast(message: MessageContent, data: DataUser): Promise<string> {
     console.log("text-davinci-003");
     const response = await this.openai.createCompletion({
-      model,
-      prompt: `${data.messages[0].content}: ${message}`,
-      temperature: data.config.temperature || 0.4,
+      model: model.textDavinci003,
+      prompt: `${message}
+      ${data.messages[0].content}`,
+      temperature: data.config.temperature || 0.75,
       max_tokens: data.config.max_tokens || 2048,
     });
     const result: string | undefined = response?.data?.choices[0]?.text;

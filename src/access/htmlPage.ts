@@ -1,11 +1,10 @@
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import OpenAi from "../class/OpenAi";
-import { Config, DataUser, Messages, modelType } from "../type";
+import { Config, DataUser, Messages, model } from "../type";
 import fsPromises from "fs/promises";
 import fs from "fs";
 async function htmlPage(body: any) {
   const message = `
-  similar structure:
   <body margin:0 padding:0>
   <headerBar width:100%> 
   </headerBar margin:0 padding:5> 
@@ -20,7 +19,7 @@ async function htmlPage(body: any) {
 
   const content = `You are a front-End developer, create a modern site , create a fake information: Articles , cards and cards images. make a html content style: page scrolling, responsive and pretty, Response in code html form`;
   const config: Config = {
-    modelType: modelType.textDavinci003,
+    model: model.gptTurbo003,
     temperature: 0.5,
     max_tokens: 3096,
   };
@@ -31,7 +30,7 @@ async function htmlPage(body: any) {
     },
   ];
   const data: DataUser = { messages, config };
-  const result = await OpenAi.withOutContext(message, data);
+  const result = await OpenAi.slow(message, message, data);
   fs.writeFileSync("temp/site.html", result);
   return result;
 }

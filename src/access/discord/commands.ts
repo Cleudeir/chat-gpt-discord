@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 import OpenAi from "../../class/OpenAi";
-import { Config, DataUser, modelType } from "../../type";
+import { Config, DataUser, model, type } from "../../type";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 
 async function commands(data: DataUser, user: string, message: string) {
@@ -10,7 +10,7 @@ async function commands(data: DataUser, user: string, message: string) {
     text = `\`\`\`\
 # Chat manager:
 !clean   : Delete the Historic chat
-!ctx     : Slow Chat with context / fast Chat without context
+!speed   : Slow Chat / fast Chat
 # Chat configure behavior category:
 !chat    : Normal chat bot
 !coder   : Transform chat like a coder assistant
@@ -24,18 +24,21 @@ async function commands(data: DataUser, user: string, message: string) {
     data.messages[0].content = `You are a coder assistant, use discord markdown to format your response, use code form when is a code, create and response fast`;
     text = "Now, i'm coder assistant now";
   } else if (message === "!bug") {
-    data.messages[0].content = `You are a coder assistant, use discord markdown to format your response, use code form when is a code, fix bug that code`;
+    data.messages[0].content = `You are a coder assistant, use Discord markdown to formate response.
+    response two steps:
+    step one: rewritten that code fixing bug, javascript code form;
+    step two: rewritten that code suggest improvement, javascript code form .`;
     text = "Now, i'm bugfix coder now";
   } else if (message === "!chat") {
     data.messages[0].content = "You are a helpful assistant inside discord, use discord markdown to format your response";
     text = "Now, i'm normal chat bot";
-  } else if (message === "!ctx") {
-    if (data.config.modelType === modelType.textDavinci003) {
-      data.config.modelType = modelType.gptTurbo003;
-      text = "now, I'm slow chat, but i will remember context";
-    } else if (data.config.modelType === modelType.gptTurbo003) {
-      data.config.modelType = modelType.textDavinci003;
-      text = "Now, I'm fast chat, but i will not remember context";
+  } else if (message === "!speed") {
+    if (data.config.model === model.textDavinci003) {
+      data.config.model = model.gptTurbo003;
+      text = "now, I'm slow chat";
+    } else if (data.config.model === model.gptTurbo003) {
+      data.config.model = model.textDavinci003;
+      text = "now, I'm fast chat";
     }
   }
 

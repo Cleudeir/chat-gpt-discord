@@ -2,7 +2,7 @@ import environment from "../../class/Environment";
 import { Client, GatewayIntentBits } from "discord.js";
 import OpenAi from "../../class/OpenAi";
 import commands from "./commands";
-import { modelType } from "../../type";
+import { model} from "../../type";
 
 async function discordChatGpt() {
   const bot = new Client({
@@ -24,7 +24,7 @@ async function discordChatGpt() {
     if (messageCreate.author.bot || channelType === "dm") {
       return;
     }
-    let result = await messageCreate.channel.send(`Já respondo...`)
+    let result = await messageCreate.channel.send(`Já respondo...`);
     const data = await OpenAi.messagesRead(user);
 
     const command = await commands(data, user, message);
@@ -33,23 +33,18 @@ async function discordChatGpt() {
       return;
     }
 
-    console.log(data.config.modelType , modelType.gptTurbo003)
-    if (data.config.modelType === modelType.gptTurbo003) {
-
-      await result.edit(`Já respondo, em 30s ...`);
-      const response: string = await OpenAi.context(user, message, data, modelType.gptTurbo003);
-      await result.edit(`${response}`);
-      return console.log("Tempo para resposta: ", (Date.now() - time) / 1000, "s");
-
-    } else if (data.config.modelType === modelType.textDavinci003) {
-
+    if (data.config.model === model.textDavinci003) {
       await result.edit(`Já respondo, em 15s ...`);
-      const response: string = await OpenAi.withOutContext(message, data, modelType.textDavinci003);
-      await result.edit(`${response}`);
+      const response: string = await OpenAi.fast(message, data);
+      await result.edit(`${response.slice(0, 2000)}`);
       return console.log("Tempo para resposta: ", (Date.now() - time) / 1000, "s");
-      
+    } else if (data.config.model === model.gptTurbo003) {
+      await result.edit(`Já respondo, em 30s ...`);
+      const _data = { messages: [data.messages[0]], config: data.config };
+      const response: string = await OpenAi.slow(user, message, _data);
+      await result.edit(`${response.slice(0, 2000)}`);
+      return console.log("Tempo para resposta: ", (Date.now() - time) / 1000, "s");
     }
-
   });
 }
 
