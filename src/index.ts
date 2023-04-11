@@ -1,14 +1,14 @@
-import discordChatGpt from "./access/discordChatGpt";
+import gpt from "./access/discord";
 import Controller from "./class/Controller";
-import nextjscoder from "./access/nextjscoder";
-import htmlpage from './access/htmlpage';
+import nextJsCoder from "./access/nextJsCoder";
+import htmlPage from './access/htmlPage';
 
 Controller.get("/", () => {
   return { status: "online" };
 });
 
-Controller.get("/nextjscoder", nextjscoder);
+Controller.get("/nextjscoder", nextJsCoder);
 
-Controller.get("/htmlpage", htmlpage);
+Controller.get("/htmlpage", htmlPage);
 
-discordChatGpt()
+gpt()

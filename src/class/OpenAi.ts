@@ -1,7 +1,9 @@
 import environment from "./Environment";
-import { Configuration, OpenAIApi } from "openai";
+import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "openai";
 import fsPromises from "fs/promises";
 import fs from "fs";
+import { Config, DataUser, MessageContent, Messages, modelType } from "../type";
+
 class OpenAi {
   private openai: OpenAIApi;
 
@@ -14,47 +16,38 @@ class OpenAi {
     this.tempDir();
   }
 
-  public async setContentDefault(user: string, roleDefine: string) {
-    try {
-      const stringify: string = JSON.stringify([
-        {
-          role: "system",
-          content: roleDefine,
-        },
-      ]);
-      await fsPromises.writeFile(`temp/${user}.json`, stringify);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   private tempDir(): void {
     if (!fs.existsSync("temp/")) {
       fsPromises.mkdir("temp/");
     }
   }
 
-  public async messagesRead(user: string): Promise<any[]> {
+  public async messagesRead(user: string): Promise<DataUser> {
     try {
-      const buffed = (await fsPromises.readFile(
-        `temp/${user}.json`
-      )) as unknown as string;
-      const read: any[] = JSON.parse(buffed);
-      return read;
+      const buffed = (await fsPromises.readFile(`temp/${user}.json`)) as unknown as string;
+      const { messages, config }: DataUser = JSON.parse(buffed);
+      return { messages, config };
     } catch (error) {
       console.log("chat not exists");
-      return [
+      const content = `You are a helpful assistant inside discord, use discord markdown to format your response`;
+      const config : Config = {
+        modelType: modelType.textDavinci003,
+        temperature: 0.4,
+        max_tokens: 2048,
+      };
+      const messages : Messages = [
         {
-          role: "system",
-          content: `You are a helpful assistant inside discord, use discord markdown to format your response`,
+          role: ChatCompletionRequestMessageRoleEnum.System,
+          content,
         },
       ];
+      return { config, messages };
     }
   }
 
-  public async messagesWrite(user: string, messages: any[]): Promise<void> {
+  public async messagesWrite(user: string, data: DataUser): Promise<void> {
     try {
-      const stringify: string = JSON.stringify(messages);
+      const stringify: string = JSON.stringify(data);
       const write = await fsPromises.writeFile(`temp/${user}.json`, stringify);
       return write;
     } catch (error) {
@@ -62,35 +55,17 @@ class OpenAi {
     }
   }
 
-  public async messagesReset(user: string): Promise<void> {
-    try {
-      const [{ content }] = await this.messagesRead(user);
-      console.log("davinci_003", content);
-      const stringify: string = JSON.stringify([
-        {
-          role: "system",
-          content,
-        },
-      ]);
-      await fsPromises.writeFile(`temp/${user}.json`, stringify);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  public async turbo(user: string, message: string): Promise<string> {
-    console.log("turbo");
-    const messages = await this.messagesRead(user);
-    messages.push({ role: "user", content: `${message}` });
+  public async context(user: string, message: MessageContent, data: DataUser, model: modelType): Promise<string> {
+    console.log("gpt-3.5-turbo");
+    data.messages.push({ role: ChatCompletionRequestMessageRoleEnum.User, content: `${message}` });
     const response = await this.openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages,
+      model,
+      messages: data.messages,
     });
-    const result: string | undefined =
-      response?.data?.choices[0]?.message?.content;
-    messages.push({ role: "assistant", content: `${result}` });
+    const result: string | undefined = response?.data?.choices[0]?.message?.content;
+    data.messages.push({ role: ChatCompletionRequestMessageRoleEnum.Assistant, content: `${result}` });
     if (result) {
-      await this.messagesWrite(user, messages);
+      await this.messagesWrite(user, { messages: data.messages, config: data.config });
       return result;
     } else {
       const result: string = "don't understand, repeat pls!";
@@ -98,19 +73,13 @@ class OpenAi {
     }
   }
 
-  public async davinci_003(
-    user: string,
-    message: string,
-    temperature?: number,
-    max_tokens?: number
-  ): Promise<string> {
-    const [{ content }] = await this.messagesRead(user);
-    console.log("davinci_003", content);
+  public async withOutContext(message: MessageContent, data: DataUser, model: modelType): Promise<string> {
+    console.log("text-davinci-003");
     const response = await this.openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: `${content}: ${message}`,
-      temperature: temperature || 0.4,
-      max_tokens: max_tokens || 2048,
+      model,
+      prompt: `${data.messages[0].content}: ${message}`,
+      temperature: data.config.temperature || 0.4,
+      max_tokens: data.config.max_tokens || 2048,
     });
     const result: string | undefined = response?.data?.choices[0]?.text;
     if (result) {

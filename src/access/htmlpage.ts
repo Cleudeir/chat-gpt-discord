@@ -1,15 +1,39 @@
-
+import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import OpenAi from "../class/OpenAi";
-async function htmlpage(body: any) {
-  
- const  prompt = `create a html page similar Kodi program that describe:
- modern headerBar include links other pages, fixed top and responsive",
- modern main ,responsive and min-hight:100vh , include in this main that theme/features : "${body.main?.split("_").join(" ")}",
- modern FooterBar include contacts, link to social media with icons, copyright. 
- pls, the CSS style inside html.
- Response in code html form`
+import { Config, DataUser, Messages, modelType } from "../type";
+import fsPromises from "fs/promises";
+import fs from "fs";
+async function htmlPage(body: any) {
+  const message = `
+  similar structure:
+  <body margin:0 padding:0>
+  <headerBar width:100%> 
+  </headerBar margin:0 padding:5> 
+  <div justify-content:stretch  width:100%>
+    sideBar: heigh:100% width:20% margin:0 padding:5;
+    main: width:80% heigh:100% margin:0 padding:0;
+  </div> 
+  <FooterBar width:100% margin:0 padding:5>
+  </FooterBar>  
+  </body> 
+    `;
 
-  return await OpenAi.davinci_003(prompt)
+  const content = `You are a front-End developer, create a modern site , create a fake information: Articles , cards and cards images. make a html content style: page scrolling, responsive and pretty, Response in code html form`;
+  const config: Config = {
+    modelType: modelType.textDavinci003,
+    temperature: 0.5,
+    max_tokens: 3096,
+  };
+  const messages: Messages = [
+    {
+      role: ChatCompletionRequestMessageRoleEnum.System,
+      content,
+    },
+  ];
+  const data: DataUser = { messages, config };
+  const result = await OpenAi.withOutContext(message, data);
+  fs.writeFileSync("temp/site.html", result);
+  return result;
 }
 
-export default htmlpage;
+export default htmlPage;
