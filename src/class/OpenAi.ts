@@ -2,7 +2,7 @@ import environment from "./Environment";
 import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "openai";
 import fsPromises from "fs/promises";
 import fs from "fs";
-import { Config, DataUser, MessageContent, Messages, model, type } from "../type";
+import { Config, DataUser, MessageContent, Messages, model } from "../type";
 
 class OpenAi {
   private openai: OpenAIApi;

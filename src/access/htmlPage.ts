@@ -1,7 +1,6 @@
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import OpenAi from "../class/OpenAi";
 import { Config, DataUser, Messages, model } from "../type";
-import fsPromises from "fs/promises";
 import fs from "fs";
 async function htmlPage(body: any) {
   const message = `

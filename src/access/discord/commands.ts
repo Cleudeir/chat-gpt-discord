@@ -1,7 +1,5 @@
-import { Message } from "discord.js";
 import OpenAi from "../../class/OpenAi";
-import { Config, DataUser, model, type } from "../../type";
-import { ChatCompletionRequestMessageRoleEnum } from "openai";
+import { DataUser, model } from "../../type";
 
 async function commands(data: DataUser, user: string, message: string) {
   let text: string = "";
