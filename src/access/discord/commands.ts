@@ -7,7 +7,6 @@ async function commands(data: DataUser, user: string, message: string) {
   if (message === "!help" || message === "!h" || message === "!?") {
     text = `\`\`\`\
 # Chat manager:
-!clean   : Delete the Historic chat
 !speed   : Slow Chat / fast Chat
 # Chat configure behavior category:
 !chat    : Normal chat bot
@@ -15,9 +14,6 @@ async function commands(data: DataUser, user: string, message: string) {
 !bug     : Transform chat like a coder bug fixer assistant
 \`\`\`\
 `;
-  } else if (message === "!clean") {
-    data.messages = [data.messages[0]];
-    text = "Now, historic is empty";
   } else if (message === "!coder") {
     data.messages[0].content = `You are a coder assistant, use discord markdown to format your response, use code form when is a code, create and response fast`;
     text = "Now, i'm coder assistant now";
