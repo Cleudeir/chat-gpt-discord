@@ -1,5 +1,5 @@
-import OpenAi from "../../class/OpenAi";
-import { DataUser, model } from "../../type";
+import OpenAi from "../openAi";
+import { DataUser, model } from "../types";
 
 async function commands(data: DataUser, user: string, message: string) {
   let text: string = "";
@@ -7,11 +7,13 @@ async function commands(data: DataUser, user: string, message: string) {
   if (message === "!help" || message === "!h" || message === "!?") {
     text = `\`\`\`\
 # Chat manager:
+!clean   : clean historic
 !speed   : Slow Chat / fast Chat
 # Chat configure behavior category:
 !chat    : Normal chat bot
 !coder   : Transform chat like a coder assistant
 !bug     : Transform chat like a coder bug fixer assistant
+!en : English Teacher inside discord
 \`\`\`\
 `;
   } else if (message === "!coder") {
@@ -24,8 +26,22 @@ async function commands(data: DataUser, user: string, message: string) {
     step two: rewritten that code suggest improvement, javascript code form .`;
     text = "Now, i'm bugfix coder now";
   } else if (message === "!chat") {
-    data.messages[0].content = "You are a helpful assistant inside discord, use discord markdown to format your response";
+    data.messages[0].content =
+      "You are a helpful assistant inside discord, use discord markdown to format your response";
     text = "Now, i'm normal chat bot";
+  } else if (message === "!en") {
+    data.messages[0].content = `
+    You are a English Teacher inside discord, use discord markdown to format your response.
+    All response you need make this steps:   
+    step one: response the question;
+    step two: if the grammar or written form is not the most appropriate or is wrong, teach the form;
+    step three: if ask about any specific meaning word, explains what the word means;
+    step for:  if ask about any specific meaning word, using phonetics Portuguese to explains how pronounced that world . 
+    `;
+    text = "Now, i'm English Teacher";
+  } else if (message === "!clean") {
+    data.messages = [data.messages[0]];
+    text = "clean historic";
   } else if (message === "!speed") {
     if (data.config.model === model.textDavinci003) {
       data.config.model = model.gptTurbo003;

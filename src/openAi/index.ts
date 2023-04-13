@@ -1,8 +1,12 @@
-import environment from "./Environment";
-import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "openai";
+import environment from "../other/Environment";
+import {
+  ChatCompletionRequestMessageRoleEnum,
+  Configuration,
+  OpenAIApi,
+} from "openai";
 import fsPromises from "fs/promises";
 import fs from "fs";
-import { Config, DataUser, MessageContent, Messages, model } from "../type";
+import { Config, DataUser, MessageContent, Messages, model } from "../types";
 
 class OpenAi {
   private openai: OpenAIApi;
@@ -24,18 +28,20 @@ class OpenAi {
 
   public async messagesRead(user: string): Promise<DataUser> {
     try {
-      const buffed = (await fsPromises.readFile(`temp/${user}.json`)) as unknown as string;
+      const buffed = (await fsPromises.readFile(
+        `temp/${user}.json`
+      )) as unknown as string;
       const { messages, config }: DataUser = JSON.parse(buffed);
       return { messages, config };
     } catch (error) {
       console.log("chat not exists");
       const content = `You are a helpful assistant inside discord, use discord markdown to format your response`;
-      const config : Config = {
+      const config: Config = {
         model: model.textDavinci003,
         temperature: 0.8,
-        max_tokens: 2048
+        max_tokens: 2048,
       };
-      const messages : Messages = [
+      const messages: Messages = [
         {
           role: ChatCompletionRequestMessageRoleEnum.System,
           content,
@@ -55,17 +61,31 @@ class OpenAi {
     }
   }
 
-  public async slow(user: string, message: MessageContent, data: DataUser): Promise<string> {
+  public async slow(
+    user: string,
+    message: MessageContent,
+    data: DataUser
+  ): Promise<string> {
     console.log("gpt-3.5-turbo");
-    data.messages.push({ role: ChatCompletionRequestMessageRoleEnum.User, content: `${message}` });
+    data.messages.push({
+      role: ChatCompletionRequestMessageRoleEnum.User,
+      content: `${message}`,
+    });
     const response = await this.openai.createChatCompletion({
       model: model.gptTurbo003,
       messages: data.messages,
     });
-    const result: string | undefined = response?.data?.choices[0]?.message?.content;
-    data.messages.push({ role: ChatCompletionRequestMessageRoleEnum.Assistant, content: `${result}` });
+    const result: string | undefined =
+      response?.data?.choices[0]?.message?.content;
+    data.messages.push({
+      role: ChatCompletionRequestMessageRoleEnum.Assistant,
+      content: `${result}`,
+    });
     if (result) {
-      await this.messagesWrite(user, { messages: data.messages, config: data.config });
+      await this.messagesWrite(user, {
+        messages: data.messages,
+        config: data.config,
+      });
       return result;
     } else {
       const result: string = "don't understand, repeat pls!";

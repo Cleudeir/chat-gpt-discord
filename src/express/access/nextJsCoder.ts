@@ -1,6 +1,6 @@
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
-import OpenAi from "../class/OpenAi";
-import { Config, DataUser, Messages, model } from "../type";
+import OpenAi from "../../openAi";
+import { Config, DataUser, Messages, model } from "../../types";
 async function nextJsCoder(body: any) {
   const message = `create a 2 files codes and suggest changed a ideal path name when exists Ideal Component Name.
  first file : ./ComponentName/index.js and his content: a  Nextjs 13 page include in this pages that features : "${body.feature}".
@@ -14,15 +14,15 @@ async function nextJsCoder(body: any) {
     max_tokens: 3096,
   };
 
-  const messages : Messages = [
+  const messages: Messages = [
     {
       role: ChatCompletionRequestMessageRoleEnum.System,
       content,
     },
   ];
-
+  const user: string = "htmlPage";
   const data: DataUser = { messages, config };
-  return await OpenAi.slow(message, message, data);
+  return await OpenAi.slow(user, message, data);
 }
 
 export default nextJsCoder;
