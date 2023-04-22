@@ -3,6 +3,13 @@ import { Client, GatewayIntentBits } from "discord.js";
 import OpenAi from "../openAi";
 import commands from "./commands";
 import { model } from "../types";
+import fsPromises from "fs/promises";
+import fs from "fs";
+import { contentProject } from "./contentProject";
+
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 async function discord() {
   const bot = new Client({
@@ -18,19 +25,38 @@ async function discord() {
     console.log("✔️  Bot is initiate");
     bot.user?.setActivity("Listening");
   });
-
+  let count = 1;
   bot.on("messageCreate", async (messageCreate) => {
     const time = Date.now();
-    const user = messageCreate.author.username;
-    const message = messageCreate.content.toLocaleLowerCase();
+    const user = messageCreate.author.username.replace(/[^0-9a-z]/gi, "");
+    let data = await OpenAi.messagesRead(user);
+    let message = messageCreate.content.toLocaleLowerCase();
     const channelType: string = messageCreate.channel.type as unknown as string;
     console.log("message: ", user, message);
 
-    if (messageCreate.author.bot || channelType === "dm") {
+    if (
+      (messageCreate.author.bot && !message.includes("$")) ||
+      channelType === "dm"
+    ) {
       return;
     }
+    if (messageCreate.author.bot) {
+      data.messages[0].content = contentProject;
+      data.config.model = model.gptTurbo003;
+      message = message.replace("$", "");
+      console.log("autoBot: ", message);
+    }
+    const botMessage ="create a code to file "
+    if (message === "!start") {
+      await messageCreate.channel.send("$!project");
+      count = Number(data.messages.filter(x=> x.role === "user").pop()?.content.replace(botMessage, "")) + 1 || 1
+      await messageCreate.channel.send(`$${botMessage}${count}.`);
+      return;
+    }
+
     let result = await messageCreate.channel.send(`Já respondo...`);
-    let data = await OpenAi.messagesRead(user);
+    
+  
     const SystemContent = data.messages[0].content.toLocaleLowerCase();
 
     const command = await commands(data, user, message);
@@ -48,11 +74,59 @@ async function discord() {
 
       if (SystemContent.includes("english")) {
       } else if (SystemContent.includes("coder")) {
-        data = { messages: [data.messages[0]], config: data.config };
+        data = { messages: [data.messages[0], ...data.messages.slice(-5)], config: data.config };
       }
       response = await OpenAi.slow(user, message, data);
     }
     await result.edit(`${response.slice(0, 2000)}`);
+    if (SystemContent.includes("coder") && count < 72) {
+      if (message.includes(botMessage)) {
+        count = Number(message.replace(botMessage, ""));
+      }
+      console.log(response);
+      console.log("sleep");
+      await sleep(20 * 1000);
+      console.log("sleep");
+      try {
+        const name = response
+          .split("\n")
+          .join(" ")
+          .split(" ")
+          .filter((x) => x.includes(".ts") || x.includes(".tsx"))[0]
+          .split("`")
+          .join("")
+          .replace(/["]/g, "")
+          .replace(",","");
+        const codeText = response
+          .split("```")[1]
+          .replace("tsx", "")
+          .replace("ts", "")
+          .replace("typescript", "")
+          .replace("javascript", "")
+          .split("export")
+          .join("export");
+        const file = `temp/project/${name}`;
+        const splitFileName = file.split("/");
+        const path = splitFileName.slice(0, splitFileName.length - 1).join("/");
+        console.log("file :\n", file);
+        console.log("path :\n", path);
+        console.log("codeText :\n", codeText);
+        if (!fs.existsSync(path)) {
+          await fsPromises.mkdir(path, { recursive: true });
+        }
+        await fsPromises.writeFile(file, codeText);
+        count++;
+
+        messageCreate.channel.send(`$${botMessage}${count}`);
+      } catch (error: any) {
+        console.log("user: ", user)
+        const messages = data.messages.slice(0,-1)
+        const config = data.config
+        await OpenAi.messagesWrite(user,{messages, config})
+        console.log(error?.message);
+        messageCreate.channel.send(`$${botMessage}${count}`);
+      }
+    }
     console.log("Tempo para resposta: ", (Date.now() - time) / 1000, "s");
   });
 }

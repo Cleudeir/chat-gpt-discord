@@ -97,8 +97,8 @@ class OpenAi {
     console.log("text-davinci-003");
     const response = await this.openai.createCompletion({
       model: model.textDavinci003,
-      prompt: `${message}
-      ${data.messages[0].content}`,
+      prompt: `${data.messages[0].content}
+      ${message}`,
       temperature: data.config.temperature || 0.75,
       max_tokens: data.config.max_tokens || 2048,
     });

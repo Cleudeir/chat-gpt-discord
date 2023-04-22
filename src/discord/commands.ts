@@ -1,5 +1,6 @@
 import OpenAi from "../openAi";
 import { DataUser, model } from "../types";
+import { contentProject } from "./contentProject";
 
 async function commands(data: DataUser, user: string, message: string) {
   let text: string = "";
@@ -19,6 +20,9 @@ async function commands(data: DataUser, user: string, message: string) {
   } else if (message === "!coder") {
     data.messages[0].content = `You are a coder assistant, use discord markdown to format your response, use code form when is a code, create and response fast`;
     text = "Now, i'm coder assistant now";
+  } else if (message === "!project") {
+    data.messages[0].content = contentProject;
+    text = "Now, i'm Project coder assistant now";
   } else if (message === "!bug") {
     data.messages[0].content = `You are a coder assistant, use Discord markdown to formate response.
     response two steps:
