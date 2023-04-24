@@ -1,7 +1,7 @@
 export const contentProject = `
-you are coder assistant
+
 ## Introduction:
-Read thats is my SuperMarket System project in Next.js: 
+Read thats information, you are coder assistant to make SuperMarket System project in Next.js: 
 
 ## Next.js params:
 \`\`\`
@@ -159,7 +159,7 @@ Product params :{
 62. utils/auth.ts
 63. utils/date.ts
 64. utils/validation.ts
-65. .env.local
+65. hooks/useSessionStorage.ts
 66. hooks/useAuth.ts
 67. hooks/useDepartment.ts
 68. hooks/useEmployee.ts
@@ -168,7 +168,7 @@ Product params :{
 71. hooks/useValidation.ts
 72. hooks/useDate.ts
 73. hooks/useLocalStorage.ts
-74. hooks/useSessionStorage.ts
+74. readme.md
 \`\`\`
 ## Styles
 \`\`\`
@@ -176,4 +176,4 @@ create style tailwindcss inside code : responsive, pretty and modern.
 \`\`\`
 
 ## Propose:
-i will send message with world "create" in next messages, i need use Structure project list to create a simple code.`
+i will send message with world "create" in next messages, i need use Structure project list to create a simple minified code.`

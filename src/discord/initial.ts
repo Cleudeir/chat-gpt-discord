@@ -32,7 +32,7 @@ async function discord() {
     let data = await OpenAi.messagesRead(user);
     let message = messageCreate.content.toLocaleLowerCase();
     const channelType: string = messageCreate.channel.type as unknown as string;
-    console.log("message: ", user, message);
+    console.log("message: ", user, message, data.messages.length);
 
     if (
       (messageCreate.author.bot && !message.includes("$")) ||
@@ -40,16 +40,18 @@ async function discord() {
     ) {
       return;
     }
-    if (messageCreate.author.bot) {
+    if (messageCreate.author.bot) {     
       data.messages[0].content = contentProject;
       data.config.model = model.gptTurbo003;
       message = message.replace("$", "");
       console.log("autoBot: ", message);
     }
     const botMessage ="create a code to file "
-    if (message === "!start") {
-      await messageCreate.channel.send("$!project");
+    if (message === "!start") {      
+      data = await OpenAi.messagesRead("chatgpt");
+      await messageCreate.channel.send("$!project"); 
       count = Number(data.messages.filter(x=> x.role === "user").pop()?.content.replace(botMessage, "")) + 1 || 1
+      console.log(data, count)
       await messageCreate.channel.send(`$${botMessage}${count}.`);
       return;
     }
@@ -79,20 +81,20 @@ async function discord() {
       response = await OpenAi.slow(user, message, data);
     }
     await result.edit(`${response.slice(0, 2000)}`);
-    if (SystemContent.includes("coder") && count < 72) {
+    if (SystemContent.includes("coder") && count < 74) {
       if (message.includes(botMessage)) {
         count = Number(message.replace(botMessage, ""));
       }
       console.log(response);
       console.log("sleep");
-      await sleep(20 * 1000);
+      await sleep(10 * 1000);
       console.log("sleep");
       try {
         const name = response
           .split("\n")
           .join(" ")
           .split(" ")
-          .filter((x) => x.includes(".ts") || x.includes(".tsx"))[0]
+          .filter((x) => x.includes(".ts") || x.includes(".tsx") || x.includes(".css"))[0]
           .split("`")
           .join("")
           .replace(/["]/g, "")
@@ -102,9 +104,7 @@ async function discord() {
           .replace("tsx", "")
           .replace("ts", "")
           .replace("typescript", "")
-          .replace("javascript", "")
-          .split("export")
-          .join("export");
+          .replace("javascript", "");
         const file = `temp/project/${name}`;
         const splitFileName = file.split("/");
         const path = splitFileName.slice(0, splitFileName.length - 1).join("/");
@@ -115,17 +115,19 @@ async function discord() {
           await fsPromises.mkdir(path, { recursive: true });
         }
         await fsPromises.writeFile(file, codeText);
-        count++;
-
-        messageCreate.channel.send(`$${botMessage}${count}`);
+        count++;       
       } catch (error: any) {
         console.log("user: ", user)
         const messages = data.messages.slice(0,-1)
         const config = data.config
         await OpenAi.messagesWrite(user,{messages, config})
         console.log(error?.message);
-        messageCreate.channel.send(`$${botMessage}${count}`);
       }
+      if (messageCreate.author.bot) {   
+      setTimeout(() => {
+        messageCreate.channel.send(`$${botMessage}${count}`);
+      }, 10000);
+    }
     }
     console.log("Tempo para resposta: ", (Date.now() - time) / 1000, "s");
   });

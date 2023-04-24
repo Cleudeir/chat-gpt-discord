@@ -47,6 +47,7 @@ class OpenAi {
           content,
         },
       ];
+      await this.messagesWrite(user, { config, messages })
       return { config, messages };
     }
   }

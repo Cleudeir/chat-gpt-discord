@@ -22,6 +22,7 @@ async function commands(data: DataUser, user: string, message: string) {
     text = "Now, i'm coder assistant now";
   } else if (message === "!project") {
     data.messages[0].content = contentProject;
+    data.config.model = model.gptTurbo003;
     text = "Now, i'm Project coder assistant now";
   } else if (message === "!bug") {
     data.messages[0].content = `You are a coder assistant, use Discord markdown to formate response.
