@@ -3,6 +3,7 @@ import environment from "../util/Environment";
 import { Client, GatewayIntentBits } from "discord.js";
 
 async function discord() {
+  let count = 1;
   const bot = new Client({
     intents: [
       GatewayIntentBits.Guilds,
@@ -16,23 +17,27 @@ async function discord() {
     console.log("✔️  Bot is initiate");
     bot.user?.setActivity("Listening");
   });
-  let count = 1;
+
+  function setCount(number: number) {
+    count = number;
+  }
+
   bot.on("messageCreate", async (messageCreate) => {
-    const authorType = messageCreate.author.bot
+    const authorType = messageCreate.author.bot;
     const user = messageCreate.author.username.replace(/[^0-9a-z]/gi, "");
     const message = messageCreate.content.toLocaleLowerCase();
     const channelType: string = messageCreate.channel.type as unknown as string;
     const time = Date.now();
-    if (
-      (authorType && !message.includes("$")) ||
-      channelType === "dm"
-    ) {
+    if ((authorType && !message.includes("$")) || channelType === "dm") {
       return;
     }
-    if(message === "!creator" || message.includes("$")){
-     const BotCoder = await coder(count, messageCreate)
+    const botMessage = "using structure project list to create a code to item ";
+    if (message === "!creator") {
+      messageCreate.channel.send(`$Starting a create a code`);
     }
-   
+    if (message.startsWith("$")) {
+      const BotCoder = await coder(botMessage, count, messageCreate, setCount);
+    }
     console.log("Tempo para resposta: ", (Date.now() - time) / 1000, "s");
   });
 }

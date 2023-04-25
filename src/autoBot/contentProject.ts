@@ -179,4 +179,11 @@ create style tailwindcss inside code : responsive, pretty and modern.
 i will send message with world "create" in next messages, i need use Structure project list to create a simple minified code.
 Response in two steps:
 one : path with a name file;
-two : code.`
+two : code.
+
+exemple response:
+file: components/common/Header.tsx
+\`\`\`
+code
+\`\`\`
+`

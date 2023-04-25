@@ -8,13 +8,18 @@ import Cache from "../Cache";
 import replaceText from "../util/replaceText";
 import ChatGpt from "../OpenAi";
 
-
-export default async function coder(count: number, messageCreate: Message<boolean>) {
+export default async function coder(
+  botMessage: string,
+  count: number,
+  messageCreate: Message<boolean>,
+  setCount: (number: number) => void
+) {
   const botName = "coder";
   let message = messageCreate.content.toLocaleLowerCase().replace("$", "");
-  const cache = new Cache(botName, "json");
-  let data: DataUser | null = await cache.messagesRead(botName);
+  const cache = new Cache("profile", "json");
+  let data: DataUser = await cache.messagesRead(botName);
   if (!data) {
+    console.log("new coder");
     data = {
       messages: [
         {
@@ -26,43 +31,52 @@ export default async function coder(count: number, messageCreate: Message<boolea
     };
     await cache.messagesWrite(botName, data);
   }
-  const botMessage = "create a code to file ";
+
   count =
     Number(
       data.messages
         .filter((x: any) => x.role === "user")
         .pop()
         ?.content.replace(botMessage, "")
-    ) +1 || 1;
-
+    ) + 1 || 1;
+  setCount(count);
+  message = `${botMessage}${count}`;
+  console.log(message);
   let result = await messageCreate.channel.send(`Já respondo...`);
   await result.edit(`Já respondo, em 30s ...`);
-
-  data = {
-    messages: [data.messages[0], ...data.messages.slice(-5)],
-    config: data.config,
-  };
   let response = await ChatGpt.slow(message, data);
-  await result.edit(`${response.slice(0, 2000)}`);
   if (count < 74) {
     if (message.includes(botMessage)) {
       count = Number(message.replace(botMessage, ""));
     }
     console.log("sleep");
-    await sleep(10 * 1000);
-      const text = replaceText(response);
-      if(text){
-        const { fileName, path, extension, code } = text
-        console.log("path : ", `project/${path}/${fileName}.${extension}`);
-        const createProject = new Cache(`project/${path}`, extension);
-        await createProject.messagesWrite(fileName, code);
-        count++;
-        await result.edit(`${response.slice(0, 2000)}`);
-      }else{        
-        await result.edit(`Concepcion error`);
-      }
-      setTimeout(() => {
+    await sleep(2 * 1000);
+    const text = replaceText(response);
+    if (text) {
+      const { fileName, path, extension, code } = text;
+      console.log("path : ", count, `project/${path}/${fileName}.${extension}`);
+      const createProject = new Cache(`project/${path}`, extension);
+      await createProject.messagesWrite(fileName, code);
+      setCount(count + 1);
+      await result.edit(`#${response.slice(0, 1999)}`);
+      data = {
+        messages: [
+          data.messages[0],
+          { role: "assistant", content: response },
+          { role: "user", content: message },
+          ...data.messages.slice(-4),
+        ],
+        config: data?.config,
+      };
+      await cache.messagesWrite(botName, data);
+      setTimeout(async () => {
+        messageCreate.channel.send(`$${botMessage}${count + 1}`);
+      }, 10000);
+    } else {
+      await result.edit(`Concepcion error`);
+      setTimeout(async () => {
         messageCreate.channel.send(`$${botMessage}${count}`);
       }, 10000);
+    }
   }
 }

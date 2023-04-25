@@ -5,7 +5,7 @@ export default function replaceText(text: string): {
   code: string;
 } | null {
   try {
-    const [pathFileName, extension] = text
+    const [pathFileName, _extension] = text
     .split("\n")
     .join(" ")
     .split(" ")
@@ -20,13 +20,16 @@ export default function replaceText(text: string): {
   const splitPathFile = pathFileName.split("/");
   const path = splitPathFile.slice(0, -1).join("/");
   const [fileName] = splitPathFile.slice(-1);
+  const extension = _extension.replace(/[^a-zA-Z]/g, '')
 
   const code = text
     .split("```")[1]
-    .replace("tsx", "")
-    .replace("ts", "")
-    .replace("typescript", "")
-    .replace("javascript", "");
+    .replace("tsx\n", "")
+    .replace("jsx\n", "")
+    .replace("js\n", "")
+    .replace("ts\n", "")
+    .replace("typescript\n", "")
+    .replace("javascript\n", "");
 
   return { fileName, path, extension, code };
   } catch (error: any) {
