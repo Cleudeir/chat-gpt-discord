@@ -1,4 +1,5 @@
 import coder from "../autoBot/coder";
+import verify from "../autoBot/verify";
 import environment from "../util/Environment";
 import { Client, GatewayIntentBits } from "discord.js";
 
@@ -28,7 +29,11 @@ async function discord() {
     const message = messageCreate.content.toLocaleLowerCase();
     const channelType: string = messageCreate.channel.type as unknown as string;
     const time = Date.now();
-    if ((authorType && !message.includes("$")) || channelType === "dm") {
+    if (
+      (authorType && !message.startsWith("$") && !message.startsWith("#")) ||
+      channelType === "dm"
+    ) {
+      console.log("return", message);
       return;
     }
     const botMessage = "using structure project list to create a code to item ";
@@ -36,8 +41,17 @@ async function discord() {
       messageCreate.channel.send(`$Starting a create a code`);
     }
     if (message.startsWith("$")) {
-      const BotCoder = await coder(botMessage, count, messageCreate, setCount);
+      await coder(botMessage, count, messageCreate, setCount);
+    } else if (message.startsWith("#")) {
+      await verify(botMessage, count, messageCreate, setCount);
     }
+    /*
+    
+    const { fileName, path, extension, code } = text;
+    console.log("path : ", count, `project/${path}/${fileName}.${extension}`);
+    const createProject = new Cache(`project/${path}`, extension);
+    await createProject.messagesWrite(fileName, code);
+*/
     console.log("Tempo para resposta: ", (Date.now() - time) / 1000, "s");
   });
 }

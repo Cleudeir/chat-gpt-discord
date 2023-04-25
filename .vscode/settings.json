@@ -4,6 +4,7 @@
         "coderjs",
         "davinci",
         "englishteacher",
+        "hookform",
         "htmlpage",
         "Kodi",
         "Nextjs",
@@ -13,6 +14,7 @@
         "openai",
         "respondo",
         "resposta",
+        "tailwindcss",
         "withoutcontext"
     ]
 }

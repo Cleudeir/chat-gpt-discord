@@ -1,6 +1,6 @@
 import OpenAi from "../OpenAi";
 import { DataUser, model } from "../types";
-import { contentProject } from "../autoBot/contentProject";
+import { PramsPropose } from "../autoBot/Proposes";
 
 async function commands(data: DataUser, user: string, message: string) {
   let text: string = "";
@@ -21,7 +21,7 @@ async function commands(data: DataUser, user: string, message: string) {
     data.messages[0].content = `You are a coder assistant, use discord markdown to format your response, use code form when is a code, create and response fast`;
     text = "Now, i'm coder assistant now";
   } else if (message === "!project") {
-    data.messages[0].content = contentProject;
+    data.messages[0].content = PramsPropose;
     data.config.model = model.gptTurbo003;
     text = "Now, i'm Project coder assistant now";
   } else if (message === "!bug") {
