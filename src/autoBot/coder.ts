@@ -1,5 +1,5 @@
 import commands from "../discord/commands";
-import { coderPropose, PramsPropose } from "./Proposes";
+import { coderPropose, PramsPropose, structurePropose } from "./Proposes";
 import { DataUser, model } from "../types";
 
 import sleep from "../util/sleep";
@@ -14,7 +14,7 @@ export default async function coder(
   messageCreate: Message<boolean>,
   setCount: (number: number) => void
 ) {
-  await messageCreate.channel.send(`Já respondo!`);
+  await messageCreate.channel.send(`Já respondo, em 30s ...`);
   const botName = "coder";
   let message = messageCreate.content.toLocaleLowerCase().replace("$", "");
   const cache = new Cache("profile", "json");
@@ -24,7 +24,7 @@ export default async function coder(
     data = {
       messages: [
         {
-          content: PramsPropose + coderPropose,
+          content: structurePropose + PramsPropose + coderPropose,
           role: "system",
         },
       ],
@@ -52,13 +52,11 @@ export default async function coder(
     await sleep(2 * 1000);
     const text = replaceText(response);
     if (text) {
-      setCount(count + 1);      
       data = {
         messages: [
           data.messages[0],
           { role: "assistant", content: response },
           { role: "user", content: message },
-          ...data.messages.slice(-2),
         ],
         config: data?.config,
       };

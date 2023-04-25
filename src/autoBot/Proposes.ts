@@ -81,13 +81,14 @@ export const structurePropose = `
 
 export const PramsPropose = `
 ## Next.js params:
-Use tag "Image" instead of "img" and define width and height params.
+Use tag "Image" instead of "img" and define width and height params,
 Use tag "Link" instead of "a", 
-Not use tag "a" inside tag "Link".
-use fetch to request to api request
-use Environment variables to api request
-use GetStaticProps when necessary.
-use tag div before "Layout" Component tag
+Not use tag "a" inside tag "Link",
+use fetch to request to api request,
+use Environment variables to api request,
+use GetStaticProps when necessary,
+use tag div before "Layout" Component tag,
+not use tag "a".
 ## react-hook-form params:
 use "react-hook-form" , "zod" and "zodResolver"
 use {
@@ -166,6 +167,10 @@ Product params :{
 
 ## Styles params:
 create style tailwindcss inside code : responsive, pretty and modern.
+
+## Code length
+code is not longer than 2000 characters
+if the code is greater than 2000 characters, suggest creating new components to divide code.
 `
 
 export const coderPropose = `
@@ -186,7 +191,7 @@ code
 export const verifyPropose = `
 ## Propose:
 Read thats information, you are bugfix assistant.
-Check that the code is correct and respects the parameters, if necessary, write the necessary improvements and corrections.
+Check that the code is correct and respects all the parameters, if necessary, write the necessary improvements and corrections.
 Response in two steps:
 one : path with a name file;
 two : code fixed.

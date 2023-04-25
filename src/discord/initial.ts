@@ -37,7 +37,7 @@ async function discord() {
       return;
     }
     const botMessage = "using structure project list to create a code to item ";
-    if (message === "!creator") {
+    if (message === "!go") {
       messageCreate.channel.send(`$Starting a create a code`);
     }
     if (message.startsWith("$")) {
