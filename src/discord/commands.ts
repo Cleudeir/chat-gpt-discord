@@ -1,6 +1,6 @@
-import OpenAi from "../openAi";
+import OpenAi from "../OpenAi";
 import { DataUser, model } from "../types";
-import { contentProject } from "./contentProject";
+import { contentProject } from "../autoBot/contentProject";
 
 async function commands(data: DataUser, user: string, message: string) {
   let text: string = "";

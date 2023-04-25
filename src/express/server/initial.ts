@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import environment from "../../other/Environment";
+import environment from "../../util/Environment";
 class Server {
   public express: express.Application;
 

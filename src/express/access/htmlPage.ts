@@ -1,5 +1,5 @@
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
-import OpenAi from "../../openAi";
+import OpenAi from "../../OpenAi";
 import { Config, DataUser, Messages, model } from "../../types";
 import fs from "fs";
 async function htmlPage(body: any) {

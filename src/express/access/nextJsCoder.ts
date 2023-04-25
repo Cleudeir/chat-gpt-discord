@@ -1,5 +1,5 @@
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
-import OpenAi from "../../openAi";
+import OpenAi from "../../OpenAi";
 import { Config, DataUser, Messages, model } from "../../types";
 async function nextJsCoder(body: any) {
   const message = `create a 2 files codes and suggest changed a ideal path name when exists Ideal Component Name.
