@@ -31,11 +31,16 @@ export default async function verify(
     };
     await cache.messagesWrite(botName, data);
   }
+  data = {
+    messages: [data.messages[0], ...data.messages.slice(-2)],
+    config: data?.config,
+  };
   let response = await ChatGpt.slow(message, data);
-  console.log("sleep");
-  await sleep(2 * 1000);
+
   await cache.messagesWrite(botName, data);
   const text = replaceText(response);
+  console.log("sleep");
+  await sleep(20 * 1000);
   if (text) {
     setCount(count + 1);
     const { fileName, path, extension, code } = text;

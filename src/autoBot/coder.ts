@@ -32,41 +32,39 @@ export default async function coder(
     };
     await cache.messagesWrite(botName, data);
   }
+  if (!count) {
+    count =
+      Number(
+        data.messages
+          .filter((x: any) => x.role === "user")
+          .pop()
+          ?.content.replace(botMessage, "")
+      ) + 1 || 1;
+  }
 
-  count =
-    Number(
-      data.messages
-        .filter((x: any) => x.role === "user")
-        .pop()
-        ?.content.replace(botMessage, "")
-    ) + 1 || 1;
   setCount(count);
   message = `${botMessage}${count}`;
   console.log(message);
   let response = await ChatGpt.slow(message, data);
-  if (count < 74) {
-    if (message.includes(botMessage)) {
-      count = Number(message.replace(botMessage, ""));
-    }
-    console.log("sleep");
-    await sleep(2 * 1000);
-    const text = replaceText(response);
-    if (text) {
-      data = {
-        messages: [
-          data.messages[0],
-          { role: "assistant", content: response },
-          { role: "user", content: message },
-        ],
-        config: data?.config,
-      };
-      await cache.messagesWrite(botName, data);
-      await messageCreate.channel.send(`#${response.slice(0, 1999)}`);
-    } else {
-      await messageCreate.channel.send(`Concepcion error`);
-      setTimeout(async () => {
-        messageCreate.channel.send(`$${botMessage}${count}`);
-      }, 10000);
-    }
+  console.log("sleep");
+  await sleep(20 * 1000);
+
+  if (message.includes(botMessage)) {
+    count = Number(message.replace(botMessage, ""));
+  }
+
+  const text = replaceText(response);
+  if (text) {
+    data = {
+      messages: [data.messages[0], ...data.messages.slice(-2)],
+      config: data?.config,
+    };
+    await cache.messagesWrite(botName, data);
+    await messageCreate.channel.send(`#${response.slice(0, 1999)}`);
+  } else {
+    await messageCreate.channel.send(`Concepcion error`);
+    setTimeout(async () => {
+      messageCreate.channel.send(`$${botMessage}${count}`);
+    }, 10000);
   }
 }

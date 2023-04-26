@@ -2,6 +2,7 @@ import coder from "../autoBot/coder";
 import verify from "../autoBot/verify";
 import environment from "../util/Environment";
 import { Client, GatewayIntentBits } from "discord.js";
+import  fs  from 'fs';
 
 async function discord() {
   let count = 1;
@@ -36,8 +37,13 @@ async function discord() {
       console.log("return", message);
       return;
     }
+    if(message === "!rm"){
+      fs.rmSync("temp/", { recursive: true, force: true });
+    }
     const botMessage = "using structure project list to create a code to item ";
-    if (message === "!go") {
+    if (message.startsWith("!go")) {
+      count = Number(message.replace("!go ",""))
+      console.log("count: ", count);
       messageCreate.channel.send(`$Starting a create a code`);
     }
     if (message.startsWith("$")) {
@@ -45,13 +51,6 @@ async function discord() {
     } else if (message.startsWith("#")) {
       await verify(botMessage, count, messageCreate, setCount);
     }
-    /*
-    
-    const { fileName, path, extension, code } = text;
-    console.log("path : ", count, `project/${path}/${fileName}.${extension}`);
-    const createProject = new Cache(`project/${path}`, extension);
-    await createProject.messagesWrite(fileName, code);
-*/
     console.log("Tempo para resposta: ", (Date.now() - time) / 1000, "s");
   });
 }

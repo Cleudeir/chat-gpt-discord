@@ -15,15 +15,14 @@ export const structurePropose = `
 11. components/ProductForm.tsx
 12. components/ProductTable.tsx
 13. components/SalesFilter.tsx
-14. components/SalesTable.tsx
-15. lib/api.ts
+14. components/SalesTable.tsx15. 
 16. lib/auth.ts
 17. pages/_app.tsx
 18. pages/_document.tsx
 19. pages/api/auth/login.ts
 20. pages/api/auth/logout.ts
 21. pages/api/clients/[id].ts
-22. pages/api/clients/index.ts
+22. pages/api/clients/index.ts 
 23. pages/api/clients/new.ts
 24. pages/api/departments/[id].ts
 25. pages/api/departments/index.ts
@@ -37,8 +36,13 @@ export const structurePropose = `
 33. pages/api/sales/index.ts
 34. pages/api/sales/new.ts
 35. pages/client/[id].tsx
+  create Client,
+  edit Client,
 36. pages/client/edit.tsx
 37. pages/client/index.tsx
+  table show Client,
+  for each row button edit and remove,
+  button remove show popup to confirm.
 38. pages/client/new.tsx
 39. pages/department/[id].tsx
 40. pages/department/index.tsx
@@ -76,6 +80,7 @@ export const structurePropose = `
 72. hooks/useDate.ts
 73. hooks/useLocalStorage.ts
 74. readme.md
+75. hooks/useClient.ts
 \`\`\`
 `
 
@@ -114,6 +119,7 @@ use zod Schema to infer types
 "typescript"
 "zod"
 "@hookform/resolvers"
+"react-icons"
 
 ## Types to Project:
 Client params: {
@@ -164,6 +170,12 @@ Product params :{
   Department
   shelf,
 }
+##pages/api/*
+use fetch to request
+back end baseUrl = "http://localhost:8080/"
+
+##lib/api.ts
+create face data to response requests
 
 ## Styles params:
 create style tailwindcss inside code : responsive, pretty and modern.

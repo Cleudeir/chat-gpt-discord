@@ -10,7 +10,7 @@ export default function replaceText(text: string): {
     .join(" ")
     .split(" ")
     .filter(
-      (x) => x.includes(".ts") || x.includes(".tsx") || x.includes(".css")
+      (x) => x.includes(".ts") || x.includes(".tsx") || x.includes(".css")|| x.includes(".md")
     )[0]
     .split("`")
     .join("")
