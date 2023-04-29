@@ -1,5 +1,4 @@
 import coder from "../autoBot/coder";
-import verify from "../autoBot/verify";
 import environment from "../util/Environment";
 import { Client, GatewayIntentBits } from "discord.js";
 import  fs  from 'fs';
@@ -48,8 +47,6 @@ async function discord() {
     }
     if (message.startsWith("$")) {
       await coder(botMessage, count, messageCreate, setCount);
-    } else if (message.startsWith("#")) {
-      await verify(botMessage, count, messageCreate, setCount);
     }
     console.log("Tempo para resposta: ", (Date.now() - time) / 1000, "s");
   });

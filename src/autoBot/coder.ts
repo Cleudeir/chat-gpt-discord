@@ -24,7 +24,7 @@ export default async function coder(
     data = {
       messages: [
         {
-          content: structurePropose + PramsPropose + coderPropose,
+          content: PramsPropose ,
           role: "system",
         },
       ],
@@ -60,7 +60,15 @@ export default async function coder(
       config: data?.config,
     };
     await cache.messagesWrite(botName, data);
-    await messageCreate.channel.send(`#${response.slice(0, 1999)}`);
+    setCount(count + 1);
+    const { fileName, path, extension, code } = text;
+    console.log("path : ", `project/${path}/${fileName}.${extension}`);
+    const createProject = new Cache(`project/${path}`, extension);
+    await createProject.messagesWrite(fileName, code);
+    await messageCreate.channel.send(`${response.slice(0, 1999)}`);
+    setTimeout(async () => {
+      messageCreate.channel.send(`$${botMessage}${count + 1}`);
+    }, 10000);
   } else {
     await messageCreate.channel.send(`Concepcion error`);
     setTimeout(async () => {
