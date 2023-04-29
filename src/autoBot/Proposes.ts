@@ -1,22 +1,19 @@
 export const PramsPropose = `
 ## Next.js params:
-Use tag "Image" instead of "img" and define width and height params,
-Use tag "Link" instead of "a", 
-Not use tag "a" inside tag "Link",
-use fetch to request to api request,
-use Environment variables to api request,
-use GetStaticProps when necessary,
-use tag div before "Layout" Component tag,
-not use tag "a".
+  Use tag "Image" instead of "img" and define width and height params,  
+  Use the "Link" tag in place of the "a" tag, 
+  Not use tag "a" inside tag "Link",
+  use fetch to request to api request,
+  use Environment variables to api request,
+  use GetStaticProps when necessary,
+  use tag "<>" inside tag "Layout",
+
 ## react-hook-form params:
-use "react-hook-form" , "zod" and "zodResolver"
-use {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Type>({resolver: zodResolver(TypeSchema)})
-create zod Schema
-use zod Schema to infer types
+  use "react-hook-form" , "zod" and "zodResolver"
+  use form = useForm<Type>({resolver: zodResolver(TypeSchema)})
+  import zod Schema
+  import type
+
 ## Dependencies params:
 "@types/node"
 "@types/react"
@@ -35,82 +32,63 @@ use zod Schema to infer types
 "@hookform/resolvers"
 "react-icons"
 
-## Types to Project:
-Client params: {
-  id,
-  FirstName,
-  surname,
-  CPF,
-  RG,
-  birthDate,
-  role,
-  sector,
-  gender,
-  email,
-  password,
-  cellPhone,
-  street,
-  HouseNumber,
-  complement,
-  neighborhood,
-  CEP,
-  city,
-  state,
-  status
-}
-Sales params :{
-  id,
-  SellCode,
-  date,
-  totalSellValue
-  description,
-  validate,
-  formPayment,
-  typePayment,
-  creditCardFlag
-} 
-Product params :{
-  id,
-  barcode,
-  description,
-  validate,
-  description,
-  image,
-  CostPrice,
-  salePrice,
-  quantity,
-  volume,
-  brand,
-  Department
-  shelf,
-}
-
 ## Structure Project List:
 \`\`\`
 1.  components/common/Header.tsx
-2.  components/common/Layout.tsx
-3.  components/common/Footer.tsx
-4.  components/common/SideBar.tsx
-5.  components/common/LoadingSpinner.tsx
-6.  components/common/ErrorMessage.tsx
-15. components/ClientForm.tsx. 
-21. pages/api/clients/[id].ts
-22. pages/api/clients/all.ts 
-35. pages/client/[id].tsx
+2.  components/common/Footer.tsx
+3.  components/common/SideBar.tsx
+    link to pages
+4.  components/common/LoadingSpinner.tsx
+5.  components/common/ErrorMessage.tsx
+6.  components/common/Layout.tsx
+    receive: children, title?, isLoading?, messageError?
+    return (
+    <div>
+      <Head>
+        <title>{title}</title>
+      </Head> ;
+      <Header/>
+      <SideBar/>
+      <Main>
+        isLoading && 
+        <div>
+          {children}
+          <ErrorMessage messageError={messageError}/>
+        </div>       
+        !isLoading && <LoadingSpinner/>
+      </Main>    
+      <Footer/>
+    </div>    
+    )
+7. components/forms/client/index.tsx
+      use inputText and inputSelect
+8. components/forms/client/inputs/inputText.tsx
+    create generic component to: nome, sobreNome, email, senha, cfpCnpj, DataNascimento, cep, telefone.
+    create mask to: cfpCnpj, DataNascimento: "DD/MM/YYYY", cep, telefone
+9. components/forms/client/inputs/inputSelect.tsx
+    create generic component to: Uf, sexo, status
+10. pages/api/client/[id].ts
+    fetch GET "http://localhost:8080/client/[id]"
+    21. pages/api/client/edit/[id].ts
+    fetch PUT "http://localhost:8080/client/[id]"
+      body: Client infos
+11. pages/api/client/all.ts 
+    fetch GET "http://localhost:8080/clients"
+12. pages/client/[id].tsx
   Create Client,
   Edit Client,
-  Use form components/ClientForm.tsx. 
-36. pages/client/edit/[id].tsx
+  Use form components/ClientForm.tsx 
+13. pages/client/edit/[id].tsx
   Edit data - if id is number, useEffect to fetch data about that client and set infos insides inputs form.
   New data  - if ud is string "new" show form empty.
-37. pages/client/index.tsx
+14. pages/client/index.tsx
   Table show Client,
   For each row button edit, view and remove, 
     button remove show popup to confirm.
     button view link to pages/client/view/[id].tsx
-38. pages/client/view/[id].tsx
+15. pages/client/view/[id].tsx
   UseEffect to fetch data about that client, show all infos that client
-56. types/endereco.ts
+16. types/endereco.ts
   Example endereco: {
     logradouro: "Segunda Avenida",
     numero: "456",
@@ -122,7 +100,7 @@ Product params :{
   }
   create zod schema
   create type
-57. types/client.ts
+17. types/client.ts
   Example Client = {
     id: 1,
     nome: "John",
@@ -139,31 +117,20 @@ Product params :{
   }
   create zod schema
   create type
-62. utils/parse.ts
-  fucntion parseCPF(string "11016241674") : return string "110.162.416-74"
-  fucntion validateCPF(string "11016241674" or "110.162.416-74") : return true or false
-  fucntion parseCNPJ(string "05570714000159") : return string "05.570.714/0001-59"
-  fucntion validateCNPJ(string "05570714000159" or "05.570.714/0001-59") : return true or false
-  fucntion capitalize(string "casa") : return string "Casa"
+18. utils/parse.ts
+  function parseCPF(string "11016241674") : return string "110.162.416-74"
+  function validateCPF(string "11016241674" or "110.162.416-74") : return true or false
+  function parseCNPJ(string "05570714000159") : return string "05.570.714/0001-59"
+  function validateCNPJ(string "05570714000159" or "05.570.714/0001-59") : return true or false
+  function capitalize(string "casa") : return string "Casa"
 \`\`\`
-
-##pages/api/*
-use fetch to request
-back end baseUrl = "http://localhost:8080/"
-
-##lib/api.ts
-create face data to response requests
 
 ## Styles params:
 create style tailwindcss inside code : responsive, pretty and modern.
 
-## Code length
-code is not longer than 2000 characters
-if the code is greater than 2000 characters, suggest creating new components to divide code.
-
 ## Propose:
 Read thats information, you are coder assistant to make SuperMarket System project in Next.js:
-i will send message with world "create" in next messages, i need use Structure project list to create a simple minified code.
+i will send message with world "create" in next messages, i need use Structure project list to create a code.
 Response in two steps:
 one : path with a name file;
 two : code.
