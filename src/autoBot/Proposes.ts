@@ -6,7 +6,7 @@ use Function Declaration
 ## Next.js params:
   use React function component
   Use tag "Image" instead of "img" and define width and height params,  
-  Use the "a" to links, 
+  not Use tag "Link",  
   use fetch to request to api request,
   use Environment variables to api request,
   use GetStaticProps when necessary,
@@ -47,55 +47,62 @@ use Function Declaration
       </Head> ;
       <Header/>
       <SideBar/>
-      <Main>
+      <main>
         isLoading && 
         <div>
           {children}
           <ErrorMessage messageError={messageError}/>
         </div>       
         !isLoading && <LoadingSpinner/>
-      </Main>    
+      </main>    
       <Footer/>
     </div>    
     )
-7. components/forms/client/index.tsx
-    use inputText and inputSelect
-8. components/forms/client/inputs/inputText.tsx
+7. components/client/form/index.tsx
+  use inputText and inputSelect
+    
+8. components/client/forms/inputs/inputText.tsx
     create generic component to: nome, sobreNome, email, senha, cfpCnpj, DataNascimento, cep, telefone.
     create mask to: cfpCnpj, DataNascimento: "DD/MM/YYYY", cep, telefone
-9. components/forms/client/inputs/inputSelect.tsx
+9. components/client/forms/inputs/inputSelect.tsx
     create generic component to: Uf, sexo, status
 
-10. pages/api/client/[id].ts
+10. components/client/Tbody.tsx
+
+11. pages/api/client/[id].ts
     return fetch GET "http://localhost:8080/client/[id]"
 
-11. pages/api/client/edit/[id].ts
+12. pages/api/client/edit/[id].ts
     return fetch PUT "http://localhost:8080/client/[id]"
     body: infos
 
-12. pages/api/client/new/[id].ts
+13. pages/api/client/new/[id].ts
 return fetch POST "http://localhost:8080/client/[id]"
 body: infos
 
-13. pages/api/client/all.ts 
+14. pages/api/client/all.ts 
     return fetch GET "http://localhost:8080/clients?limit=500"
 
-14. pages/client/edit/[id].tsx
-  use components/ClientForm.tsx 
+15. pages/client/edit/[id].tsx
+  use components/client/form/index.tsx 
   use useEffect to fetch "pages/api/client/[id]" data about that client and setValues insides inputs form
   create and use a function to fetch PUT "pages/api/client/edit/[id]" to send client infos edited
-15. pages/client/view/[id].tsx
+
+16. pages/client/view/[id].tsx
   use useEffect to fetch "pages/api/client/[id]" data about that client, show all infos that client.
-16. pages/client/new.tsx
-  use components/ClientForm.tsx
+
+17. pages/client/new.tsx
+  use components/client/Form.tsx
   create and use a function to fetch PUT "pages/api/client/new/[id]" to send client infos to create new.
-17. pages/client/index.tsx
+
+18. pages/client/index.tsx
   use useEffect to fetch "pages/api/client/clients" data about that client, show all infos in a Table,  show Client 30 per Table page.
+  use components/client/Tbody.tsx
   For each row include buttons to:
     edit link to pages/client/view/[id].tsx;
     remove, button show popup to confirm;
     view link to pages/client/view/[id].tsx;
-18. types/endereco.ts
+19. types/endereco.ts
   Example endereco: {
     logradouro: "Segunda Avenida",
     numero: "456",
@@ -107,7 +114,7 @@ body: infos
   }
   create zod schema with hard validation
   create type
-19. types/client.ts
+20. types/client.ts
   Example Client = {
     id: 1,
     nome: "John",
@@ -124,12 +131,13 @@ body: infos
   }
   create zod schema with hard validation
   create type
-20. utils/parse.ts
-  function parseCPF(string "11016241674") : return string "110.162.416-74"
-  function validateCPF(string "11016241674" or "110.162.416-74") : return true or false
-  function parseCNPJ(string "05570714000159") : return string "05.570.714/0001-59"
+21. utils/parse.ts
+  function parseCPFCNPJ(string "11016241674" or  string "05570714000159") : return string "110.162.416-74" or return string "05.570.714/0001-59"
+  function validateCPF(string "11016241674" or "110.162.416-74") : return true or false 
   function validateCNPJ(string "05570714000159" or "05.570.714/0001-59") : return true or false
   function capitalize(string "casa") : return string "Casa"
+  parseUnixToDate(unixDate: string) : return string "DD/MM/YYYY"
+  parseDateToUnix(string "DD/MM/YYYY) : return unixDate: string"
 \`\`\`
 
 ## react-hook-form params:
@@ -138,19 +146,23 @@ body: infos
   import zod Schema
   import type
 
+## <link> params:
+Replace all tag "Link" to tag "a"
+
 ## Styles params:
 create style tailwindcss inside code : responsive, pretty and modern.
 
 ## Propose:
 Read thats information, you are coder assistant to make SuperMarket System project in Next.js:
 i will send message with world "create" in next messages, i need use Structure project list to create a code.
+Not is need comment.
 Response in two steps:
 one : path with a name file;
 two : code.
 
 example response:
 file: components/common/Header.tsx
-\`\`\`
+\`\`\`javascript
 code
 \`\`\`
 `

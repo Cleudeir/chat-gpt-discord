@@ -12,7 +12,8 @@ export default async function coder(
   botMessage: string,
   count: number,
   messageCreate: Message<boolean>,
-  setCount: (number: number) => void
+  setCount: (number: number) => void,
+  last: number
 ) {
   await messageCreate.channel.send(`Já respondo, em 30s ...`);
   const botName = "coder";
@@ -72,10 +73,12 @@ export default async function coder(
       `);
     }else{
       await messageCreate.channel.send(`${response}`);
-    }   
-    setTimeout(async () => {
-      messageCreate.channel.send(`$${botMessage}${count + 1}`);
-    }, 10000);
+    }
+    if(count < last){
+      setTimeout(async () => {
+        messageCreate.channel.send(`$${botMessage}${count + 1}`);
+      }, 10000);
+    }  
   } else {
     await messageCreate.channel.send(`Concepcion error`);
     setTimeout(async () => {

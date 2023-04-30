@@ -5,6 +5,7 @@ import  fs  from 'fs';
 
 async function discord() {
   let count = 1;
+  let last = 1;
   const bot = new Client({
     intents: [
       GatewayIntentBits.Guilds,
@@ -39,14 +40,17 @@ async function discord() {
     if(message === "!rm"){
       fs.rmSync("temp/", { recursive: true, force: true });
     }
-    const botMessage = "using structure project list to create a code to item ";
+    const botMessage = "using structure project list to create a code without tag 'a' to item ";
     if (message.startsWith("!go")) {
-      count = Number(message.replace("!go ",""))
-      console.log("count: ", count);
+      const [params1, params2, params3] = message.split(" ");
+      count = Number(params2) || 1
+      last = Number(params3)  || Number(params2) || 1
+      console.log("start: ", count);
+      console.log('last: ', last);
       messageCreate.channel.send(`$Starting a create a code`);
     }
     if (message.startsWith("$")) {
-      await coder(botMessage, count, messageCreate, setCount);
+      await coder(botMessage, count, messageCreate, setCount, last);
     }
     console.log("Tempo para resposta: ", (Date.now() - time) / 1000, "s");
   });
