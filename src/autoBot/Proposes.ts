@@ -69,33 +69,33 @@ use Function Declaration
 10. pages/api/client/[id].ts
     return fetch GET "http://localhost:8080/client/[id]"
 
-21. pages/api/client/edit/[id].ts
+11. pages/api/client/edit/[id].ts
     return fetch PUT "http://localhost:8080/client/[id]"
     body: infos
 
-21. pages/api/client/new/[id].ts
+12. pages/api/client/new/[id].ts
 return fetch POST "http://localhost:8080/client/[id]"
 body: infos
 
-11. pages/api/client/all.ts 
+13. pages/api/client/all.ts 
     return fetch GET "http://localhost:8080/clients?limit=500"
 
-13. pages/client/edit/[id].tsx
+14. pages/client/edit/[id].tsx
   use components/ClientForm.tsx 
   use useEffect to fetch "pages/api/client/[id]" data about that client and setValues insides inputs form
   create and use a function to fetch PUT "pages/api/client/edit/[id]" to send client infos edited
 15. pages/client/view/[id].tsx
   use useEffect to fetch "pages/api/client/[id]" data about that client, show all infos that client.
-13. pages/client/new.tsx
+16. pages/client/new.tsx
   use components/ClientForm.tsx
   create and use a function to fetch PUT "pages/api/client/new/[id]" to send client infos to create new.
-14. pages/client/index.tsx
+17. pages/client/index.tsx
   use useEffect to fetch "pages/api/client/clients" data about that client, show all infos in a Table,  show Client 30 per Table page.
   For each row include buttons to:
     edit link to pages/client/view/[id].tsx;
     remove, button show popup to confirm;
     view link to pages/client/view/[id].tsx;
-16. types/endereco.ts
+18. types/endereco.ts
   Example endereco: {
     logradouro: "Segunda Avenida",
     numero: "456",
@@ -107,7 +107,7 @@ body: infos
   }
   create zod schema with hard validation
   create type
-17. types/client.ts
+19. types/client.ts
   Example Client = {
     id: 1,
     nome: "John",
@@ -124,7 +124,7 @@ body: infos
   }
   create zod schema with hard validation
   create type
-18. utils/parse.ts
+20. utils/parse.ts
   function parseCPF(string "11016241674") : return string "110.162.416-74"
   function validateCPF(string "11016241674" or "110.162.416-74") : return true or false
   function parseCNPJ(string "05570714000159") : return string "05.570.714/0001-59"
