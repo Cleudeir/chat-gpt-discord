@@ -128,6 +128,10 @@ Product params :{
 36. pages/client/edit/[id].tsx
   Edit data - if id is number, useEffect to fetch data about that client and set infos insides inputs form.
   New data  - if ud is string "new" show form empty.
+36. pages/client/new.tsx
+36. pages/client/view/[id].tsx
+  Edit data - if id is number, useEffect to fetch data about that client and set infos insides inputs form.
+  New data  - if ud is string "new" show form empty.
 37. pages/client/index.tsx
   Table show Client,
   For each row button edit, view and remove, 
