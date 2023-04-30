@@ -59,7 +59,7 @@ use Function Declaration
     </div>    
     )
 7. components/forms/client/index.tsx
-      use inputText and inputSelect
+    use inputText and inputSelect
 8. components/forms/client/inputs/inputText.tsx
     create generic component to: nome, sobreNome, email, senha, cfpCnpj, DataNascimento, cep, telefone.
     create mask to: cfpCnpj, DataNascimento: "DD/MM/YYYY", cep, telefone
@@ -78,26 +78,23 @@ return fetch POST "http://localhost:8080/client/[id]"
 body: infos
 
 11. pages/api/client/all.ts 
-    return fetch GET "http://localhost:8080/clients"
+    return fetch GET "http://localhost:8080/clients?limit=500"
 
 13. pages/client/edit/[id].tsx
   use components/ClientForm.tsx 
   use useEffect to fetch "pages/api/client/[id]" data about that client and setValues insides inputs form
   create and use a function to fetch PUT "pages/api/client/edit/[id]" to send client infos edited
 15. pages/client/view/[id].tsx
-  use useEffect to fetch "pages/api/client/[id]" data about that client, show all infos that client
+  use useEffect to fetch "pages/api/client/[id]" data about that client, show all infos that client.
 13. pages/client/new.tsx
   use components/ClientForm.tsx
   create and use a function to fetch PUT "pages/api/client/new/[id]" to send client infos to create new.
 14. pages/client/index.tsx
-  use useEffect to fetch "pages/api/client/clients" data about that client, show all infos that client
-  Table show Client,
-  show Client 30 per Table page
-  For each row include button to:
-    edit link to pages/client/view/[id].tsx
-    view and remove, remove show popup to confirm.
-    view link to pages/client/view/[id].tsx
-
+  use useEffect to fetch "pages/api/client/clients" data about that client, show all infos in a Table,  show Client 30 per Table page.
+  For each row include buttons to:
+    edit link to pages/client/view/[id].tsx;
+    remove, button show popup to confirm;
+    view link to pages/client/view/[id].tsx;
 16. types/endereco.ts
   Example endereco: {
     logradouro: "Segunda Avenida",

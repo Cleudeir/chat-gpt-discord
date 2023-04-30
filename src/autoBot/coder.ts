@@ -65,7 +65,14 @@ export default async function coder(
     console.log("path : ", `project/${path}/${fileName}.${extension}`);
     const createProject = new Cache(`project/${path}`, extension);
     await createProject.messagesWrite(fileName, code);
-    await messageCreate.channel.send(`${response.slice(0, 1999)}`);
+    if(response.length > 1950){
+      await messageCreate.channel.send(`
+      ${response.slice(0, 1950)}
+      \`\`\`
+      `);
+    }else{
+      await messageCreate.channel.send(`${response}`);
+    }   
     setTimeout(async () => {
       messageCreate.channel.send(`$${botMessage}${count + 1}`);
     }, 10000);
