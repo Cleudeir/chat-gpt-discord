@@ -1,23 +1,24 @@
 import * as z from "zod";
 import { enderecoSchema } from "./endereco";
 
-const clientSchema = z.object({
+export const clientSchema = z.object({
   id: z.number(),
-  nome: z.string().min(3),
-  sobrenome: z.string().min(3),
-  cpfCnpj: z.string().refine((value) =>
-    /^(([0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2})|([0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2}))$/.test(value)
+  nome: z.string().nonempty().max(255),
+  sobrenome: z.string().nonempty().max(255),
+  cpfCnpj: z.string().transform((value: string) =>
+    value.replace(/[^\d]+/g, "")
+  ).refine(value => value.length === 11 || value.length === 14),
+  dataNascimento: z.string().transform((value: string) =>
+    new Date(value).getTime().toString()
   ),
-  dataNascimento: z.string().refine((value) => /\d{2}\/\d{2}\/\d{4}/.test(value)),
-  dataRegistro: z.string().refine((value) => /\d{2}\/\d{2}\/\d{4}/.test(value)),
-  sexo: z.enum(["feminino", "masculino"]),
+  dataRegistro: z.string().transform((value: string) =>
+    new Date(value).getTime().toString()
+  ),
+  sexo: z.string().options(["homem", "mulher", "outro"]),
   email: z.string().email(),
-  senha: z.string().regex(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}\[\]:;<>,.\?\\\/~_+\-=|]).{6,}$/),
-  telefone: z.string().refine((value) => /\(\d{2,3}\)\s\d{1}\s\d{4}\-\d{4}/.test(value)),
+  senha: z.string().min(6).max(255),
   endereco: enderecoSchema,
   status: z.boolean(),
 });
 
-type Client = z.infer<typeof clientSchema>;
-
-export { clientSchema, Client };
+export type ClientType = z.infer<typeof clientSchema>;

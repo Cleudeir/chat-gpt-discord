@@ -1,7 +1,7 @@
-const DateToUnix = (date: string): string => {
-  const [day, month, year] = date.split('/');
-  const unixTime = new Date(Number(year), Number(month) - 1, Number(day)).getTime() / 1000;
-  return unixTime.toString();
-};
+const DateToUnix = (dateString: string): string => {
+  const parts = dateString.split('/');
+  const dateObject = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+  return (dateObject.getTime() / 1000).toString();
+}
 
 export default DateToUnix;

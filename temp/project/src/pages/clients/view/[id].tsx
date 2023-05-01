@@ -1,68 +1,87 @@
-import { useEffect, useState } from "react";
-import Layout from "../../../components/common/Layout";
-import { Client } from "../../../types/client";
+import { GetServerSideProps } from 'next';
+import Layout from '../../../components/common/Layout';
+import { Client } from '../../../types/client';
+import { useEffect, useState } from 'react';
+import { UnixToDate } from '../../../utils/parse/UnixToDate';
+import { useRouter } from 'next/dist/client/router';
 
-type ViewClientPageProps = {
-  id: string;
+type Props = {
+  client: Client;
 };
 
-export default function ViewClientPage({ id=1 }: ViewClientPageProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [client, setClient] = useState<Client | null>(null);
-  const [messageError, setMessageError] = useState("");
+export const getServerSideProps: GetServerSideProps<Props> = async ({
+  params,
+}) => {
+  const { id } = params;
+  const res = await fetch(`${process.env.API_URL}/clients/view/${id}`);
+  const client: Client = await res.json();
+
+  return {
+    props: {
+      client,
+    },
+  };
+};
+
+const ViewClient = ({ client }: Props) => {
+  const { push } = useRouter();
+  const { nome, sobrenome, cpfCnpj, email, sexo, dataNascimento, endereco } =
+    client;
+  const [formattedDataNascimento, setFormattedDataNascimento] =
+    useState<string>('');
 
   useEffect(() => {
-    console.log(id)
-    fetch(`/api/clients/view/${id}`)
-      .then((response) => response.json())
-      .then((data) => setClient(data))
-      .then((data) => console.log(data))
-      .catch((error) => setMessageError(error.message))
-      .finally(() => setIsLoading(true));
-  }, [id]);
+    setFormattedDataNascimento(UnixToDate(dataNascimento));
+  }, [dataNascimento]);
+
+  const handleEdit = () => {
+    push(`/clients/edit/${client.id}`);
+  };
 
   return (
-    <Layout title="Visualizar cliente" isLoading={isLoading} messageError={messageError}>
-      <div className="bg-white rounded-md shadow-md p-10">
-        <h1 className="text-2xl font-bold mb-5">Dados do cliente</h1>
-        {!isLoading && client ? (
-          <div>
-            <div className="mb-5">
-              <span className="font-bold">Nome:</span> {client.nome}
-            </div>
-            <div className="mb-5">
-              <span className="font-bold">Sobrenome:</span> {client.sobrenome}
-            </div>
-            <div className="mb-5">
-              <span className="font-bold">CPF/CNPJ:</span> {client.cpfCnpj}
-            </div>
-            <div className="mb-5">
-              <span className="font-bold">Data de nascimento:</span> {client.dataNascimento}
-            </div>
-            <div className="mb-5">
-              <span className="font-bold">Data de registro:</span> {client.dataRegistro}
-            </div>
-            <div className="mb-5">
-              <span className="font-bold">Sexo:</span> {client.sexo}
-            </div>
-            <div className="mb-5">
-              <span className="font-bold">E-mail:</span> {client.email}
-            </div>
-            <div className="mb-5">
-              <span className="font-bold">Telefone:</span> {client.telefone}
-            </div>
-            <div className="mb-5">
-              <span className="font-bold">Endereço:</span>{" "}
-              {`${client.endereco.logradouro}, ${client.endereco.numero}, ${client.endereco.complemento}, ${client.endereco.bairro}, ${client.endereco.cep}, ${client.endereco.localidade}, ${client.endereco.uf}`}
-            </div>
-            <div className="mb-5">
-              <span className="font-bold">Status:</span>{" "}
-              {client.status ? "Ativo" : "Inativo"}
-            </div>
-          </div>
-        ) : null}
+    <Layout title={`${nome} ${sobrenome}`}>
+      <div className="text-center">
+        <h1 className="text-xl font-bold">{`${nome} ${sobrenome}`}</h1>
+        <div className="mt-6">
+          <p className="font-medium text-gray-900">CPF/CNPJ:</p>
+          <p>{cpfCnpj}</p>
+        </div>
+        <div className="mt-6">
+          <p className="font-medium text-gray-900">E-mail:</p>
+          <p>{email}</p>
+        </div>
+        <div className="mt-6">
+          <p className="font-medium text-gray-900">Sexo:</p>
+          <p>{sexo}</p>
+        </div>
+        <div className="mt-6">
+          <p className="font-medium text-gray-900">Data de nascimento:</p>
+          <p>{formattedDataNascimento}</p>
+        </div>
+        <div className="mt-6">
+          <p className="font-medium text-gray-900">Endereço:</p>
+          <p>{`${endereco.logradouro}, ${endereco.numero} - ${endereco.complemento}`}</p>
+          <p>{`${endereco.bairro}, ${endereco.cep}, ${endereco.localidade} - ${endereco.uf}`}</p>
+        </div>
+        <div className="mt-8 flex justify-center">
+          <button
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mr-4"
+            type="button"
+            onClick={handleEdit}
+          >
+            Editar
+          </button>
+          <a
+            href="/clients"
+            className="bg-gray-300 text-gray-900 py-2 px-4 rounded hover:bg-gray-400"
+          >
+            Voltar
+          </a>
+        </div>
       </div>
-      <a href="/clients">Voltar</a>
     </Layout>
   );
-}
+};
+
+export default ViewClient;
+

@@ -1,27 +1,32 @@
-import { FunctionComponent } from "react";
-import { FieldValues, UseFormRegister } from "react-hook-form";
-import { Zodenum } from "zod";
+import { FC } from "react";
+import { UseFormRegister } from "react-hook-form";
 
-type Props = {
+interface Props {
   label: string;
-  register: UseFormRegister<FieldValues>;
-  options: Zodenum<any>;
-};
+  name: string;
+  register: UseFormRegister<any>;
+  options: string[];
+}
 
-const InputSelect: FunctionComponent<Props> = ({ label, register, options }) => {
+const InputSelect: FC<Props> = ({ label, name, register, options }) => {
   return (
-    <div>
-      <label>
+    <div className="my-4">
+      <label htmlFor={name} className="block font-medium text-gray-700">
         {label}
-        <select {...register} className="block w-full p-2 mt-1 bg-gray-100 rounded-lg" placeholder={label}>
-          {options.enum.map((option: any) => (
-            <option key={option}>{option}</option>
-          ))}
-        </select>
       </label>
+      <select
+        id={name}
+        {...register(name)}
+        className="block w-full px-4 py-2 mt-2 text-gray-700 border rounded-lg shadow-sm focus:border-blue-500 focus:outline-none focus:shadow-outline-blue form-select"
+      >
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };
 
 export default InputSelect;
-

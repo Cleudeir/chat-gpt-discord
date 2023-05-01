@@ -1,23 +1,24 @@
-import Image from 'next/image';
-import Layout from '../components/common/Layout';
+import Layout from "../components/common/Layout";
 
-const Index = () => {
+export default function Home() {
   return (
-    <Layout>
-      <div className="flex flex-col items-center mt-12">
-        <h1 className="font-bold text-4xl text-center">Welcome to SuperMarket System</h1>
-        <div className="mt-8">
-          <Image src="/images/supermarket.jpg" alt="Supermarket" width={800} height={500} />
-        </div>
-        <div className="mt-8">
-          <a href="/clients">
-            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-              Clien            </button>
-          </a>
-        </div>
+    <Layout pageTitle="Home">
+      <div className="text-3xl font-bold mb-6">Welcome to your Supermarket System!</div>
+      <div className="text-lg mb-6">
+        Where do you want to go? Use the navigation bar on the left to get started.
       </div>
+      <div className="text-lg font-semibold">Quick shortcuts:</div>
+      <ul className="list-disc list-inside mb-6">
+        <li className="mb-1">
+          <a href="/clients">Manage clients</a>
+        </li>
+        <li className="mb-1">
+          <a href="/employees">Manage employees</a>
+        </li>
+        <li className="mb-1">
+          <a href="/products">Manage products</a>
+        </li>
+      </ul>
     </Layout>
   );
-};
-
-export default Index;
+}

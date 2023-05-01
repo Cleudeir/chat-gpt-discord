@@ -1,47 +1,31 @@
-import type { Client } from '../../../types/client';
+import { Client } from "../../../types/client";
 
 type Props = {
   client: Client;
-  onEdit: (id: number) => void;
   onRemove: (id: number) => void;
 };
 
-const Row = ({ client, onEdit, onRemove }: Props) => {
-  const handleEdit = () => {
-    onEdit(client.id);
-  };
-
+export default function Row({ client, onRemove }: Props) {
   const handleRemove = () => {
-    const confirmation = confirm(`Are you sure you want to remove ${client.nome}?`);
-    if (confirmation) {
+    const result = confirm(`Tem certeza que deseja remover o cliente ${client.nome}?`);
+    if (result) {
       onRemove(client.id);
     }
   };
 
   return (
     <tr>
-      <td>{client.nome}</td>
-      <td>{client.sobreNome}</td>
-      <td>{client.cpfCnpj}</td>
-      <td>{UnixToDate(client.dataNascimento)}</td>
-      <td>{client.email}</td>
-      <td>{client.telefone}</td>
-      <td>{client.endereco.localidade}</td>
-      <td>{client.endereco.uf}</td>
-      <td>{client.status ? 'Active' : 'Inactive'}</td>
-      <td>
-        <a onClick={handleEdit}>
-          <FontAwesomeIcon icon={faEdit} className="text-green-500 mx-2 hover:text-green-600" />
-        </a>
-        <a onClick={handleRemove}>
-          <FontAwesomeIcon icon={faTrash} className="text-red-500 mx-2 hover:text-red-600" />
-        </a>
-        <a href={`/clients/view/${client.id}`}>
-          <FontAwesomeIcon icon={faEye} className="text-blue-500 mx-2 hover:text-blue-600" />
-        </a>
+      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{`${client.nome} ${client.sobreNome}`}</td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{client.cpfCnpj}</td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{client.dataRegistro}</td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{client.email}</td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{client.telefone}</td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{client.status ? "Ativo" : "Inativo"}</td>
+      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+        <a href={`clients/edit/${client.id}`} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</a>
+        <button className="text-red-600 hover:text-red-900" onClick={handleRemove}>Remover</button>
+        <a href={`clients/view/${client.id}`} className="text-indigo-600 hover:text-indigo-900 ml-4">Visualizar</a>
       </td>
     </tr>
   );
-};
-
-export default Row;
+}
