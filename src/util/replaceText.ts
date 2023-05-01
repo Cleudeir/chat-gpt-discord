@@ -3,6 +3,7 @@ export default function replaceText(text: string): {
   path: string;
   extension: string;
   code: string;
+  resume: string;
 } | null {
   try {
     const [pathFileName, _extension] = text
@@ -24,6 +25,7 @@ export default function replaceText(text: string): {
 
   const code = text
     .split("```")[1]
+    .replace("css\n", "")
     .replace("tsx\n", "")
     .replace("jsx\n", "")
     .replace("js\n", "")
@@ -31,7 +33,9 @@ export default function replaceText(text: string): {
     .replace("typescript\n", "")
     .replace("javascript\n", "");
 
-  return { fileName, path, extension, code };
+  const resume : string = text.split("Resume:")[1];
+
+  return { fileName, path, extension, code, resume };
   } catch (error: any) {
     console.log(error.message)
     return null
