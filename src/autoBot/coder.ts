@@ -49,17 +49,10 @@ export default async function coder(
     console.log("path : ", `project/src/${path}/${fileName}.${extension}`);
     const createProject = new Cache(`project/src/${path}`, extension);
     createProject.messagesWrite(fileName, code);
-    if (response.length > 1950) {
-      await messageCreate.channel.send(`
-      ${response.slice(0, 1950)}
-      \`\`\`
-      `);
-    } else {
-      await messageCreate.channel.send(`
-      File: project/src/${path}/${fileName}.${extension}
-      Resume: ${resume}
-      `);
-    }
+    await messageCreate.channel.send(`.
+File: project/src/${path}/${fileName}.${extension}
+Resume: ${resume}
+    `);
     if (count < last) {
       await sleep(20 * 1000);
       messageCreate.channel.send(`$${botMessage}${count + 1}`);

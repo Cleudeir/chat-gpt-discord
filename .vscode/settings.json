@@ -35,5 +35,6 @@
         "tailwindcss",
         "telefone",
         "withoutcontext"
-    ]
+    ],
+    "editor.wordWrap": "on"
 }
