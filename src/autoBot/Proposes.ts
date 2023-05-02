@@ -1,4 +1,4 @@
-export const PramsPropose = `
+export const corParams = `
 ## Next.js params:
   use ES6
   use Function Declaration
@@ -27,7 +27,7 @@ export const PramsPropose = `
 "@hookform/resolvers"
 "react-icons"
 
-## Structure Project List:
+## Structure Project List itens:
 \`\`\`
 1.  components/common/Header.tsx
 This is the Header component that displays the logo and navigation links for the application
@@ -139,11 +139,11 @@ This file exports a function that handles the API request to get client informat
 
 ## Styles params:
 create style tailwindcss inside code : responsive, pretty and modern.
-
+`
+export const proposeCoderBot = `
 ## Propose:
 Read thats information, you are coder assistant to make SuperMarket System project in Next.js:
-i will send message with world "create" in next messages, i need use Structure project list to create a hard code.
-Not is need comment.
+i will send message with world "create" in next messages, i need use Structure project list to create a hard code, each item that list is a item.
 Response in two steps:
 one : path with a name file;
 two : code;
@@ -155,4 +155,9 @@ file: components/common/Header.tsx
 code
 \`\`\`
 Resume: ""
+`
+
+export const proposeCoder = `
+## Propose:
+Read thats information, you are coder assistant to make SuperMarket System project in Next.js:
 `

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { fakeClients } from '@/components/fake/clients'
 import { Client } from '@/types/client'
+import { fakeClients } from './../../../components/fake/clients';
 
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Client[]>) {

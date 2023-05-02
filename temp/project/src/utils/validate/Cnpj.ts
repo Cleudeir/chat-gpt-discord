@@ -47,3 +47,4 @@ function validateCNPJ(cnpj: string): boolean {
 
   return true;
 }
+export default validateCNPJ

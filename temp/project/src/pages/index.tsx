@@ -2,23 +2,16 @@ import Layout from "../components/common/Layout";
 
 export default function Home() {
   return (
-    <Layout pageTitle="Home">
-      <div className="text-3xl font-bold mb-6">Welcome to your Supermarket System!</div>
-      <div className="text-lg mb-6">
-        Where do you want to go? Use the navigation bar on the left to get started.
+    <Layout title="Home">
+      <div className="max-w-4xl m-auto">
+        <h1 className="text-2xl font-bold mt-4 mb-8">Welcome to Supermarket System!</h1>
+        <p className="text-justify">
+          Here you can manage your clients' information, including their personal data and address, and keep track of all your products and employees. Feel free to explore the links in the sidebar to access the different pages and features of our app.
+        </p>
+        <p className="text-justify mt-8">
+          This web application was created by [YOUR-NAME] using Next.js, React, and Tailwind CSS. Check out the source code on GitHub: <a href="https://github.com/YOUR-GITHUB-USERNAME/supermarket-system">https://github.com/YOUR-GITHUB-USERNAME/supermarket-system</a>.
+        </p>
       </div>
-      <div className="text-lg font-semibold">Quick shortcuts:</div>
-      <ul className="list-disc list-inside mb-6">
-        <li className="mb-1">
-          <a href="/clients">Manage clients</a>
-        </li>
-        <li className="mb-1">
-          <a href="/employees">Manage employees</a>
-        </li>
-        <li className="mb-1">
-          <a href="/products">Manage products</a>
-        </li>
-      </ul>
     </Layout>
   );
 }

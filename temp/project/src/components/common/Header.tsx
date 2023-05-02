@@ -1,37 +1,33 @@
 import React from "react";
+import Image from 'next/image';
 
-const Header = () => {
+const Header: React.FC = () => {
   return (
-    <header className="bg-blue-500 p-4">
-      <div className="flex justify-between text-white">
-        <div className="flex items-center">
-          <img src="/logo.png" alt="logo" className="h-8 mr-2" />
-          <h1 className="text-xl font-bold">SuperMarket</h1>
-        </div>
-        <nav className="hidden md:flex">
-          <a href="/" className="mx-2 hover:underline">
-            Home
-          </a>
-          <a href="/clients" className="mx-2 hover:underline">
-            Clien          </a>
-          <a href="/employees" className="mx-2 hover:underline">
-            Employees
-          </a>
-          <a href="/products" className="mx-2 hover:underline">
-            Products
-          </a>
-          <a href="/selves" className="mx-2 hover:underline">
-            Selves
-          </a>
-          <a href="/pages" className="mx-2 hover:underline">
-            Pages
-          </a>
+    <header className="bg-white border-b border-gray-200">
+      <div className="container mx-auto flex justify-between items-center px-4 py-6">
+        {/* Add your logo and adjust the height and width according to your needs */}
+        <a href="/" className="flex">
+          <Image src="/logo.png" alt="Logo" width={40} height={40} />
+        </a>
+        <nav>
+          <ul className="flex items-center">
+            <li className="ml-8">
+              <a href="/">Home</a>
+            </li>
+            <li className="ml-8">
+              <a href="/clients">Clients</a>
+            </li>
+            <li className="ml-8">
+              <a href="/employees">Employees</a>
+            </li>
+            <li className="ml-8">
+              <a href="/products">Products</a>
+            </li>
+            <li className="ml-8">
+              <a href="/pages">Pages</a>
+            </li>
+          </ul>
         </nav>
-        <div className="md:hidden">
-          <button className="text-white">
-            <i className="fas fa-bars"></i>
-          </button>
-        </div>
       </div>
     </header>
   );

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Row from "./Row";
-import { ClientType } from "../../../types/client";
+import { Client } from "../../../types/client";
 
 interface Props {
-  clients: ClientType[];
+  clients: Client[];
 }
 
 const Tbody = ({ clients }: Props) => {
@@ -16,7 +16,9 @@ const Tbody = ({ clients }: Props) => {
 
   const renderRows = () => {
     return currentClients.map((client) => (
-      <Row key={client.id} client={client} />
+      <Row key={client.id} client={client} onRemove={function (id: number): void {
+        throw new Error("Function not implemented.");
+      } } />
     ));
   };
 

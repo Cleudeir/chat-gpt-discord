@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next';
 import Layout from '../../../components/common/Layout';
 import { Client } from '../../../types/client';
 import { useEffect, useState } from 'react';
-import { UnixToDate } from '../../../utils/parse/UnixToDate';
+import  UnixToDate  from '../../../utils/parse/UnixToDate';
 import { useRouter } from 'next/dist/client/router';
 
 type Props = {
@@ -12,9 +12,10 @@ type Props = {
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   params,
 }) => {
-  const { id } = params;
-  const res = await fetch(`${process.env.API_URL}/clients/view/${id}`);
+  const { id } = params ;
+  const res = await fetch(`http://localhost:3000/api/clients/view/${id}`);
   const client: Client = await res.json();
+  console.log("", client);
 
   return {
     props: {

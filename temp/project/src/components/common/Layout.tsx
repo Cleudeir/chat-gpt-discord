@@ -4,6 +4,7 @@ import Header from "./Header";
 import SideBar from "./SideBar";
 import LoadingSpinner from "./LoadingSpinner";
 import ErrorMessage from "./ErrorMessage";
+import Footer from "./Footer";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ type LayoutProps = {
 const Layout: React.FC<LayoutProps> = ({
   children,
   title,
-  isLoading,
+  isLoading=true,
   messageError,
 }) => (
   <div>
@@ -23,8 +24,9 @@ const Layout: React.FC<LayoutProps> = ({
       <title>{title}</title>
     </Head>
     <Header />
+    <div className="flex flex-row w-full">    
     <SideBar />
-    <main>
+    <main className="w-3/4 rounded-md bg-gray-100">
       {isLoading ? (
         <div>
           {children}
@@ -36,6 +38,7 @@ const Layout: React.FC<LayoutProps> = ({
         </div>
       )}
     </main>
+    </div>
     <Footer />
   </div>
 );

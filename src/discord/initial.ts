@@ -1,3 +1,4 @@
+import coderBot from "../autoBot/coderBot";
 import coder from "../autoBot/coder";
 import environment from "../util/Environment";
 import { Client, GatewayIntentBits } from "discord.js";
@@ -5,7 +6,7 @@ import  fs  from 'fs';
 
 async function discord() {
   let count = 1;
-  let last = 1;
+  let end = 1;
   const bot = new Client({
     intents: [
       GatewayIntentBits.Guilds,
@@ -44,13 +45,15 @@ async function discord() {
     if (message.startsWith("!go")) {
       const [params1, params2, params3] = message.split(" ");
       count = Number(params2) || 1
-      last = Number(params3)  || Number(params2) || 1
+      end = Number(params3)  || Number(params2) || 1
       console.log("start: ", count);
-      console.log('last: ', last);
+      console.log('last: ', end);
       messageCreate.channel.send(`$${botMessage}${count}`);
     }
     if (message.startsWith("$")) {
-      await coder(botMessage, count, messageCreate, setCount, last);
+      await coderBot(botMessage, count, messageCreate, setCount, end);
+    }else {
+      await coder(message, messageCreate);
     }
     console.log("Tempo para resposta: ", (Date.now() - time) / 1000, "s");
   });

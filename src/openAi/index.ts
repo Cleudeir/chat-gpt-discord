@@ -28,10 +28,6 @@ class ChatGpt {
     });
     let result: string | undefined =
       response?.data?.choices[0]?.message?.content;
-    data.messages.push({
-      role: ChatCompletionRequestMessageRoleEnum.Assistant,
-      content: `${result}`,
-    });
     if (!result) {
       result = "don't understand, repeat pls!";
     }

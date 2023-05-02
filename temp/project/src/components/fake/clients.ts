@@ -2,7 +2,7 @@ export const fakeClients = [
   {
     id: 1,
     nome: "João",
-    sobreNome: "Silva",
+    sobrenome: "Silva",
     cpfCnpj: "45087744847",
     dataNascimento: "1234567890",
     sexo: "masculino",
@@ -23,7 +23,7 @@ export const fakeClients = [
   {
     id: 2,
     nome: "Maria",
-    sobreNome: "Souza",
+    sobrenome: "Souza",
     cpfCnpj: "10103323662",
     dataNascimento: "2345678901",
     sexo: "feminino",
@@ -44,7 +44,7 @@ export const fakeClients = [
   {
     id: 3,
     nome: "José",
-    sobreNome: "Oliveira",
+    sobrenome: "Oliveira",
     cpfCnpj: "76748117479",
     dataNascimento: "3456789012",
     sexo: "masculino",

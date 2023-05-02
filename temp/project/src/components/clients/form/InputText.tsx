@@ -1,61 +1,47 @@
-import { ChangeEvent } from "react";
-import { UseFormSetValue } from "react-hook-form";
-import { CpfCnpjPattern } from "../../../utils/constants/patterns";
-import { capitalize } from "../../../utils/parse/Capitalize";
-import { validateCPF } from "../../../utils/validate/Cpf";
-import { validateCNPJ } from "../../../utils/validate/Cnpj";
+import React, { FC } from 'react';
+import { UseFormRegisterReturn, UseFormReturn, FieldValues } from 'react-hook-form';
+import { Client } from '@/types/client';
+import { Endereco } from '@/types/endereco';
 
-type Props = {
+interface InputTextProps {
   label: string;
-  name: keyof Client;
-  setValue: UseFormSetValue<Client>;
-  value?: string;
-  required: boolean;
-  error?: string;
-  onBlur: VoidFunction;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  name: keyof Omit<Client, 'endereco'> | (`endereco.${keyof Endereco}`);
+  form: UseFormReturn<Client>;
+  placeholder?: string;
+  type?: string;
+  required?: boolean;
 }
 
-export function InputText({
+const InputText: FC<InputTextProps> = ({
   label,
   name,
-  setValue,
-  value,
-  required,
-  error,
-  onBlur,
-  onChange,
-}: Props) {
+  form,
+  placeholder,
+  required = true,
+  type = 'text',
+}: InputTextProps): JSX.Element => {
+  const { errors } = form.formState;
+
   return (
-    <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2">
-      <label htmlFor={name} className="block text-lg font-medium uppercase tracking-wide text-gray-700">
-        {capitalize(label)}
-        {required && (
-          <sup>
-            <abbr title="Campo obrigatório">*</abbr>
-          </sup>
-        )}
+    <div className="form-group w-full p-2">
+      <label htmlFor={`${name}-input`} className="block text-gray-700 font-bold mb-2">
+        {label}
+        {required && <span className="text-red-600">*</span>}
       </label>
       <input
-        type={name === "cpfCnpj" ? "text" : name === "dataNascimento" ? "date" : "text"}
-        id={name}
-        name={name}
-        className={`block w-full px-4 py-2 mt-2 font-semibold text-gray-700 placeholder-gray-400 border rounded-lg appearance-none focus:outline-none ${error ? "border-red-500" : "border-gray-500"} focus:border-blue-400 focus:shadow-outline-blue sm:text-sm sm:leading-5`}
-        ref={(e) => {
-          setValue(name, e?.value);
-        }}
-        value={value}
-        required={required}
-        onChange={onChange}
-        onBlur={onBlur}
-        pattern={name === "cpfCnpj" ? CpfCnpjPattern : ""}
-        title={name === "cpfCnpj" ? "CPF ou CNPJ inválido" : ""}
+        {...form.register(name, { required })}
+        type={type}
+        id={`${name}-input`}
+        placeholder={placeholder}
+        className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+          errors && errors[name] ? 'border-red-500' : ''
+        }`}
       />
-      {error && (
-        <p className="mt-2 text-sm text-red-600">
-          {error}
-        </p>
+      {errors && errors[name] && (
+        <div className="text-red-500 text-sm mt-1">{errors[name].message}</div>
       )}
     </div>
   );
-}
+};
+
+export default InputText;

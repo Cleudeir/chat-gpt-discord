@@ -14,11 +14,11 @@ export const clientSchema = z.object({
   dataRegistro: z.string().transform((value: string) =>
     new Date(value).getTime().toString()
   ),
-  sexo: z.string().options(["homem", "mulher", "outro"]),
+  sexo: z.string(),
   email: z.string().email(),
   senha: z.string().min(6).max(255),
   endereco: enderecoSchema,
   status: z.boolean(),
 });
 
-export type ClientType = z.infer<typeof clientSchema>;
+export type Client = z.infer<typeof clientSchema>;
