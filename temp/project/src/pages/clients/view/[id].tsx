@@ -4,6 +4,7 @@ import { Client } from '../../../types/client';
 import { useEffect, useState } from 'react';
 import  UnixToDate  from '../../../utils/parse/UnixToDate';
 import { useRouter } from 'next/dist/client/router';
+import Link from 'next/link';
 
 type Props = {
   client: Client;
@@ -72,12 +73,12 @@ const ViewClient = ({ client }: Props) => {
           >
             Editar
           </button>
-          <a
+          <Link
             href="/clients"
             className="bg-gray-300 text-gray-900 py-2 px-4 rounded hover:bg-gray-400"
           >
             Voltar
-          </a>
+          </Link>
         </div>
       </div>
     </Layout>

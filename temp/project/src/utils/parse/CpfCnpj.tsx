@@ -1,4 +1,4 @@
-const CPFCNPJ = (value: string): string => {
+const parseCpfCnpj = (value: string): string => {
   const regex = /^([0-9]{3})([0-9]{3})([0-9]{3})([0-9]{2})$/;
 
   if (regex.test(value)) {
@@ -13,3 +13,4 @@ const CPFCNPJ = (value: string): string => {
 
   return value;
 };
+export default parseCpfCnpj;

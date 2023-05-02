@@ -49,15 +49,16 @@ const Tbody = ({ clients }: Props) => {
   return (
     <>
       <table className="w-full text-center">
-        <thead>
-          <tr className="pb-2 border-b border-gray-400">
-            <th className="hidden lg:table-cell py-3">#</th>
+        <thead className="pb-2 border-b border-gray-400">
+          <tr>
+            <th className="hidden lg:table-cell py-3">id</th>
             <th className="hidden sm:table-cell py-3">Nome</th>
             <th className="hidden md:table-cell py-3">Sobrenome</th>
             <th className="hidden lg:table-cell py-3">CPF/CNPJ</th>
             <th className="hidden md:table-cell py-3">Data de Registro</th>
+            <th className="hidden md:table-cell py-3">Email</th>
             <th className="hidden lg:table-cell py-3">Status</th>
-            <th className="py-3"></th>
+            <th className="hidden lg:table-cell py-3" colspan="3">-</th>       
           </tr>
         </thead>
         <tbody>{renderRows()}</tbody>
