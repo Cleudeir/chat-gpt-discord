@@ -8,6 +8,37 @@ type Props = {
   defaultValues?: Client | {};
 };
 
+const BrazilianStates = [
+  "Acre",
+  "Alagoas",
+  "Amapá",
+  "Amazonas",
+  "Bahia",
+  "Ceará",
+  "Distrito Federal",
+  "Espírito Santo",
+  "Goiás",
+  "Maranhão",
+  "Mato Grosso",
+  "Mato Grosso do Sul",
+  "Minas Gerais",
+  "Pará",
+  "Paraíba",
+  "Paraná",
+  "Pernambuco",
+  "Piauí",
+  "Rio de Janeiro",
+  "Rio Grande do Norte",
+  "Rio Grande do Sul",
+  "Rondônia",
+  "Roraima",
+  "Santa Catarina",
+  "São Paulo",
+  "Sergipe",
+  "Tocantins"
+]
+
+
 export default function ClientForm({ defaultValues = {} }: Props) {
   const form = useForm<Client>({
     resolver: zodResolver(clientSchema),
@@ -33,7 +64,7 @@ export default function ClientForm({ defaultValues = {} }: Props) {
       <InputText label="Bairro" name="endereco.bairro" form={form} />
       <InputText label="CEP" name="endereco.cep" form={form} />
       <InputText label="Localidade" name="endereco.localidade" form={form} />
-      <InputText label="UF" name="endereco.uf" form={form} />
+      <InputSelect label="Estado" name="endereco.uf" options={BrazilianStates} form={form} />
 
       <button
         type="submit"
