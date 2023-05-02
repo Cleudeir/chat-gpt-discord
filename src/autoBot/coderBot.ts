@@ -1,12 +1,11 @@
-import commands from "../discord/commands";
-import { coderPropose, corParams, proposeCoderBot, structurePropose } from "./Proposes";
+import { corParams, proposeCoderBot} from "./Proposes";
 import { DataUser, model } from "../types";
 
 import sleep from "../util/sleep";
 import { Message } from "discord.js";
 import Cache from "../Cache";
 import replaceText from "../util/replaceText";
-import ChatGpt from "../OpenAi";
+import ChatGpt from "../openAi";
 
 export default async function coderBot(
   botMessage: string,

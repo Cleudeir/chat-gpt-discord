@@ -1,4 +1,4 @@
-import OpenAi from "../OpenAi";
+import OpenAi from "../openAi";
 import { DataUser, model } from "../types";
 import { corParams } from "../autoBot/Proposes";
 

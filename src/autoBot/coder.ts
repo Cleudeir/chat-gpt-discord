@@ -2,7 +2,7 @@ import commands from "../discord/commands";
 import { corParams, proposeCoder } from "./Proposes";
 import { DataUser, model } from "../types";
 import { Message } from "discord.js";
-import ChatGpt from "../OpenAi";
+import ChatGpt from "../openAi";
 
 export default async function coder(
   message: string,
