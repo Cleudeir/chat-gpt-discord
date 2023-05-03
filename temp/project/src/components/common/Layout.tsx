@@ -16,7 +16,7 @@ type LayoutProps = {
 const Layout: React.FC<LayoutProps> = ({
   children,
   title,
-  isLoading=true,
+  isLoading = true,
   messageError,
 }) => (
   <div>
@@ -24,20 +24,23 @@ const Layout: React.FC<LayoutProps> = ({
       <title>{title}</title>
     </Head>
     <Header />
-    <div className="flex flex-row w-full">    
-    <SideBar />
-    <main className="w-3/4 rounded-md bg-gray-100">
-      {isLoading ? (
-        <div>
-          {children}
-          <ErrorMessage messageError={messageError} />
-        </div>
-      ) : (
-        <div className="text-center mt-4">
-          <LoadingSpinner />
-        </div>
-      )}
-    </main>
+    <div className="flex flex-row w-full min-h-screen">
+      <div className="fixed w-32 rounded-md ">
+        <SideBar />
+      </div>
+
+      <main className="ml-32 w-full rounded-md bg-gray-100 p-4">
+        {isLoading ? (
+          <div>
+            {children}
+            {messageError && <ErrorMessage messageError={messageError} />}
+          </div>
+        ) : (
+          <div className="text-center mt-4">
+            <LoadingSpinner />
+          </div>
+        )}
+      </main>
     </div>
     <Footer />
   </div>

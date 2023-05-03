@@ -15,6 +15,7 @@ export const clientSchema = z.object({
     new Date(value).getTime().toString()
   ),
   sexo: z.string(),
+  telefone: z.string(),
   email: z.string().email(),
   senha: z.string().min(6).max(255),
   endereco: enderecoSchema,
