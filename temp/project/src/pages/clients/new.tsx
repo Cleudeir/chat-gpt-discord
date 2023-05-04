@@ -8,12 +8,10 @@ import { useRouter } from "next/router";
 
 export default function NewClientPage() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
-    resolver: zodResolver(clientSchema)
-  });
-  
-  const onSubmit = async (values: any) => {
+  const [isLoading, setIsLoading] = useState(true);  
+  const submit = (values: any) => {
+    console.log("data:" ,  values);
+    /*
     setIsLoading(true);
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clients/new`, {
       method: "POST",
@@ -29,6 +27,7 @@ export default function NewClientPage() {
       const message = await res.text();
       alert(message);
     }
+    */
   };
 
   return (
@@ -37,7 +36,7 @@ export default function NewClientPage() {
         <div className="text-center font-bold text-xl mb-4">
           <h1>Novo Cliente</h1>
         </div>
-        <ClientForm/>
+        <ClientForm submit={submit}/>
       </div>
     </Layout>
   );

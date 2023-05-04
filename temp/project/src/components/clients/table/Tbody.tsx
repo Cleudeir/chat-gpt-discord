@@ -1,71 +1,24 @@
-import { useState } from "react";
+import { Client } from "@/types/client";
 import Row from "./Row";
-import { Client } from "../../../types/client";
 
 interface Props {
-  clients: Client[];
-}
-
-const Tbody = ({ clients }: Props) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const clientsPerPage = 30;
-
-  const indexOfLastClient = currentPage * clientsPerPage;
-  const indexOfFirstClient = indexOfLastClient - clientsPerPage;
-  const currentClients = clients.slice(indexOfFirstClient, indexOfLastClient);
-
-  const renderRows = () => {
-    return currentClients.map((client) => (
-      <Row key={client.id} client={client} onRemove={function (id: number): void {
-        throw new Error("Function not implemented.");
-      } } />
-    ));
-  };
-
-  const renderPagination = () => {
-    const pageNumbers = [];
-    const numPages = Math.ceil(clients.length / clientsPerPage);
-    for (let i = 1; i <= numPages; i++) {
-      pageNumbers.push(i);
-    }
-    return (
-      <div className="flex justify-center my-4 text-xl font-medium">
-        {pageNumbers.map((number) => (
-          <a
-            href="#"
-            key={number}
-            className={`mx-2 ${
-              currentPage === number ? "text-blue-700 underline" : "text-blue-400"
-            }`}
-            onClick={() => setCurrentPage(number)}
-          >
-            {number}
-          </a>
-        ))}
-      </div>
-    );
-  };
-
+    data: Client[];
+  }
+  
+function Tbody({data}: Props) {
   return (
-    <>
-      <table className="w-full text-center">
-        <thead className="pb-2 border-b border-gray-400">
-          <tr>
-            <th className="hidden lg:table-cell py-3">id</th>
-            <th className="hidden sm:table-cell py-3">Nome</th>
-            <th className="hidden md:table-cell py-3">Sobrenome</th>
-            <th className="hidden lg:table-cell py-3">CPF/CNPJ</th>
-            <th className="hidden md:table-cell py-3">Data de Registro</th>
-            <th className="hidden md:table-cell py-3">Email</th>
-            <th className="hidden lg:table-cell py-3">Status</th>
-            <th className="hidden lg:table-cell py-3" colspan="3">-</th>       
-          </tr>
-        </thead>
-        <tbody>{renderRows()}</tbody>
-      </table>
-      {renderPagination()}
-    </>
+    <tbody className="pb-2 border-b border-gray-400">
+      {data.map((item: { id: any; }) => (
+        <Row
+          key={item.id}
+          client={item}
+          onRemove={function (id: number): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
+      ))}
+    </tbody>
   );
-};
+}
 
 export default Tbody;

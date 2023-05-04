@@ -6,7 +6,7 @@ import { clientSchema, Client } from '../../../types/client';
 
 type Props = {
   defaultValues?: Client | {};
-  submit : Function
+  submit : (func: any) => Promise<void>;
 };
 
 const BrazilianStates = [
@@ -47,19 +47,15 @@ export default function ClientForm({ defaultValues = {} , submit }: Props) {
     defaultValues,
   });
 
-  const { handleSubmit} = form;
 
   return (
-    <form className="max-w-sm mx-auto" onSubmit={(e)=>{
-      console.log("", e);
-      handleSubmit(submit(e))
-    }      
-    }>
+    <form className="max-w-sm mx-auto" onSubmit={()=>form.handleSubmit((e)=>submit(e))}>
       <InputText label="Nome" name="nome" form={form} />
       <InputText label="Sobrenome" name="sobrenome" form={form} />
       <InputText label="CPF/CNPJ" name="cpfCnpj" form={form} />
       <InputText label="Data de nascimento" name="dataNascimento" form={form} />
       <InputText label="E-mail" name="email" form={form} />
+      <InputText label="Telefone" name="telefone" form={form} />
       <InputText label="Senha" name="senha" type="password" form={form} />
       <InputSelect label="Sexo" name="sexo" options={sexos} form={form} />
       <InputText label="Logradouro" name="endereco.logradouro" form={form} />

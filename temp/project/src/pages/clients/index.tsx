@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Layout from '../../components/common/Layout';
-import Tbody from '../../components/clients/table/Tbody';
+import Table from '../../components/clients/table';
 import { Client } from '@/types/client';
 import Link from 'next/link';
 
@@ -35,7 +35,7 @@ const Clients = (): JSX.Element => {
           New Client
         </Link>
       </div>
-      <Tbody clients={clients} />
+      <Table data={clients} />
     </Layout>
   );
 };
