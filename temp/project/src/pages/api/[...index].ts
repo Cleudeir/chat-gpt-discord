@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import ErrorMessage from './../../components/common/ErrorMessage';
+import { fakeClients } from "@/components/fake/clients";
 
 async function fetchWithTimeout(url: string, options?: RequestInit, timeout = 3000): Promise<globalThis.Response | unknown> {
   return await Promise.race([
@@ -20,14 +20,13 @@ export default async function handler(
   const body = req.body;
   const mother = req.method
   const BackEndUrl = process.env.BACK_END_URL
-  console.log("", mother, url, query, body);
+  console.log({mother, url, query, body});
   if (mother === "GET") {
     try {
-      const response = await fetchWithTimeout(`${BackEndUrl}${url}`)
-      console.log(`${BackEndUrl}${url}`, response)
+      const response = await fetchWithTimeout(`${BackEndUrl}${url}`) as globalThis.Response
       const json = await response.json()
-      return res.status(200).json(json)
-    } catch (error) {   
+      return res.status(response.status).json(json)
+    } catch (error) {
       return res.status(500).json(error)
     }
   }

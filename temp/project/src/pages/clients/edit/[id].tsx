@@ -20,8 +20,9 @@ const ClientEdit: NextPage = () => {
       if (response.status !== 200) {
         setMessageError(response.statusText)
       }
-      const json = await  response.json();      
-      setClient(json.filter((x:any)=> x.id === Number(router.query.id)));
+      const json = await  response.json();  
+      console.log(json)    
+      setClient(json.filter((x:any)=> x.id === Number(router.query.id))[0]);
       setLoading(true)
     }
     if(router.query.id){

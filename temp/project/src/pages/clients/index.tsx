@@ -15,7 +15,6 @@ const Clients = (): JSX.Element => {
         setMessageError(response.statusText)
       };
       const json = await  response.json();
-      console.log(json);
       setClients(json);
       setLoading(true)
     }
@@ -42,25 +41,3 @@ const Clients = (): JSX.Element => {
 };
 
 export default Clients;
-/*@Autowired
-	private ClienteService clienteService;
-	
-	@PostMapping("/cadastrar")
-	public ResponseEntity<Object> cadastrarCliente(@RequestBody ClienteDTO clienteDTO){
-		return clienteService.cadastrarCliente(clienteDTO);
-	}
-	
-	@PutMapping("/atualizar/{id}")
-	public void atualizarCliente(@PathVariable("id") Long id, @RequestBody ClienteDTO clienteDTO) {
-		clienteService.atualizarCliente(id, clienteDTO);
-	}
-	
-	@GetMapping("/listar")
-	public ResponseEntity<List<Cliente>> listarCliente(){
-		return clienteService.listarClientes();
-	}
-	
-	@DeleteMapping("/deletar/{id}")
-	public void deletarCliente(@PathVariable("id") Long id) {
-		clienteService.deletarCliente(id);
-	}*/
