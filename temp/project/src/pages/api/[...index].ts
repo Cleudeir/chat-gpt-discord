@@ -23,7 +23,15 @@ export default async function handler(
   console.log({mother, url, query, body});
   if (mother === "GET") {
     try {
-      const response = await fetchWithTimeout(`${BackEndUrl}${url}`) as globalThis.Response
+      const response = await fetchWithTimeout(`${BackEndUrl}${url}`,
+    { 
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZUB0ZXN0ZS5jb20iLCJpc3MiOiJBUEkgS2F0aWFNZXJjYW50aWwiLCJpZCI6MSwiZXhwIjoxNjgzMjQ0MzIxfQ.PhPFDl3V9ZIpDmkRz7Q7voaCU_AavuKAj9tgK7xcaUw"
+      }
+    }
+      ) as globalThis.Response
       const json = await response.json()
       return res.status(response.status).json(json)
     } catch (error) {
