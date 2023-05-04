@@ -32,8 +32,9 @@ const ClientEdit: NextPage = () => {
    
   }, [router.query]);
 
-  const handleSubmit = async (data: { endereco: { cep: string; numero: string; }; dataNascimento: string; cpfCnpj: string; }) => {
-    setIsLoading(true);
+  const submit = async (data) => {
+    console.log("dasta",data);
+    setLoading(true);
     try {
       const res = await fetch(`/api/clients/edit/${client.id}`, {
         method: "PUT",
@@ -76,7 +77,7 @@ const ClientEdit: NextPage = () => {
       messageError={messageError}
     >
       <h1 className="text-2xl font-bold">Editar Cliente</h1>
-      <ClientForm defaultValues={client}/>
+      <ClientForm defaultValues={client} submit={submit}/>
     </Layout>
   );
 };

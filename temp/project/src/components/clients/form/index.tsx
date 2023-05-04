@@ -6,6 +6,7 @@ import { clientSchema, Client } from '../../../types/client';
 
 type Props = {
   defaultValues?: Client | {};
+  submit : Function
 };
 
 const BrazilianStates = [
@@ -40,7 +41,7 @@ const BrazilianStates = [
 
 const sexos = [{id:"homem" ,value:'homem'},{id:"mulher" ,value: 'mulher'}]
 
-export default function ClientForm({ defaultValues = {} }: Props) {
+export default function ClientForm({ defaultValues = {} , submit }: Props) {
   const form = useForm<Client>({
     resolver: zodResolver(clientSchema),
     defaultValues,
@@ -49,7 +50,11 @@ export default function ClientForm({ defaultValues = {} }: Props) {
   const { handleSubmit} = form;
 
   return (
-    <form className="max-w-sm mx-auto" onSubmit={handleSubmit(() => {})}>
+    <form className="max-w-sm mx-auto" onSubmit={(e)=>{
+      console.log("", e);
+      handleSubmit(submit(e))
+    }      
+    }>
       <InputText label="Nome" name="nome" form={form} />
       <InputText label="Sobrenome" name="sobrenome" form={form} />
       <InputText label="CPF/CNPJ" name="cpfCnpj" form={form} />
