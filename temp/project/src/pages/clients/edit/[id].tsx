@@ -1,28 +1,35 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Layout from "../../../components/common/Layout";
-import { clientSchema, Client } from "../../../types/client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormProviderProps, useForm } from "react-hook-form";
-import InputText from "../../../components/clients/form/InputText";
-import { capitalize } from "../../../utils/parse/Capitalize";
-import UnixToDate from "../../../utils/parse/UnixToDate";
-import validateCPF from "../../../utils/validate/Cpf";
-import validateCNPJ from "../../../utils/validate/Cnpj";
-import ErrorMessage from "./../../../components/common/ErrorMessage";
 import ClientForm from "@/components/clients/form";
 
-interface Props {
-  client: Client;
-}
-
-const ClientEdit: NextPage<Props> = ({ client }) => {
-  console.log(client);
+const ClientEdit: NextPage = () => {
+  const [client,setClient] = useState(null);
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [messageError, setMessageError] = useState<string| null>(null);
   const router = useRouter();
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchClients(){
+      console.log("fetch");
+      const response = await fetch('/api/cliente/listar')
+      console.log("response", response);
+      if (response.status !== 200) {
+        setMessageError(response.statusText)
+      }
+      const json = await  response.json();      
+      setClient(json.filter((x:any)=> x.id === Number(router.query.id)));
+      setLoading(true)
+    }
+    if(router.query.id){
+      fetchClients()
+    }
+    console.log(router.query.id);
+   
+  }, [router.query]);
 
   const handleSubmit = async (data: { endereco: { cep: string; numero: string; }; dataNascimento: string; cpfCnpj: string; }) => {
     setIsLoading(true);
@@ -62,38 +69,15 @@ const ClientEdit: NextPage<Props> = ({ client }) => {
   };
 
   return (
-    <Layout
+    <Layout 
       title="Editar Cliente"
       isLoading={isLoading}
-      messageError={errorMessage}
+      messageError={messageError}
     >
       <h1 className="text-2xl font-bold">Editar Cliente</h1>
       <ClientForm defaultValues={client}/>
     </Layout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps<Props> = async ({
-  params
-}) => {
-  console.log("id:", params);
-  try {
-    const res = await fetch(
-      `http://localhost:3000/api/clients/view/${params.id}`
-    );
-    const client = await res.json();
-    console.log(params.id, client);
-
-    return {
-      props: {
-        client,
-      },
-    };
-  } catch (error) {
-    return {
-      notFound: true,
-    };
-  }
 };
 
 export default ClientEdit;

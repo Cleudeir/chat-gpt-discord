@@ -10,7 +10,7 @@ type LayoutProps = {
   children: React.ReactNode;
   title?: string;
   isLoading?: boolean;
-  messageError?: string;
+  messageError?: string | null;
 };
 
 const Layout: React.FC<LayoutProps> = ({
@@ -32,7 +32,7 @@ const Layout: React.FC<LayoutProps> = ({
       <main className="ml-32 w-full rounded-md bg-gray-100 p-4">
         {isLoading ? (
           <div>
-            {children}
+            {!messageError && children}
             {messageError && <ErrorMessage messageError={messageError} />}
           </div>
         ) : (

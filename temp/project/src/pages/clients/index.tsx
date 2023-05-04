@@ -7,18 +7,19 @@ import Link from 'next/link';
 const Clients = (): JSX.Element => {
   const [clients, setClients] = useState<Client[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = useState<string>(null);
-
+  const [messageError, setMessageError] = useState<string| null>(null);
   useEffect(() => {
-    setLoading(false);
-    fetch('/api/clients')
-      .then( (response) => {
-        if (!response.ok) throw new Error(response.statusText);
-        return  response.json();
-      })
-      .then((data) => setClients(data))
-      .catch((error) => setErrorMsg(error.message))
-      .finally(() => setLoading(true));      
+    async function fetchClients(){
+      const response = await fetch('/api/cliente/listar')
+      if (response.status !== 200) {
+        setMessageError(response.statusText)
+      };
+      const json = await  response.json();
+      console.log(json);
+      setClients(json);
+      setLoading(true)
+    }
+    fetchClients()
   }, []);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ const Clients = (): JSX.Element => {
   }, [clients]);
 
   return (
-    <Layout title="Clients" isLoading={isLoading} messageError={errorMsg}>
+    <Layout title="Clients" isLoading={isLoading} messageError={messageError}>
       <div className="mb-5">
         <Link
           href="/clients/new"
