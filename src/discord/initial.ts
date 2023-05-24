@@ -3,7 +3,8 @@ import coder from "../autoBot/coder";
 import environment from "../util/Environment";
 import { Client, GatewayIntentBits } from "discord.js";
 import  fs  from 'fs';
-
+import  os  from 'os';
+const userHomeDir = os.homedir();
 async function discord() {
   let count = 1;
   let end = 1;
@@ -39,7 +40,7 @@ async function discord() {
       return;
     }
     if(message === "!rm"){
-      fs.rmSync("temp/", { recursive: true, force: true });
+      fs.rmSync(userHomeDir+"/temp/", { recursive: true, force: true });
     }
     const botMessage = "using structure project list to create a code to (not Use tag 'Link', use only tag 'a')  item ";
     if (message.startsWith("!go")) {

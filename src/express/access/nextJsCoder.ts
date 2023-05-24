@@ -1,6 +1,7 @@
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import OpenAi from "../../openAi";
 import { Config, DataUser, Messages, model } from "../../types";
+
 async function nextJsCoder(body: any) {
   const message = `create a 2 files codes and suggest changed a ideal path name when exists Ideal Component Name.
  first file : ./ComponentName/index.js and his content: a  Nextjs 13 page include in this pages that features : "${body.feature}".

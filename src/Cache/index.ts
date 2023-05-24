@@ -1,5 +1,8 @@
 import fsPromises from "fs/promises";
 import fs from "fs";
+import os from "os";
+const userHomeDir = os.homedir();
+
 class Cache {
   private path: string;
   private extension: string;
@@ -10,15 +13,15 @@ class Cache {
   }
 
   private tempDir(): void {
-    if (!fs.existsSync(`temp/${this.path}`)) {
-      fsPromises.mkdir(`temp/${this.path}`, { recursive: true });
+    if (!fs.existsSync(`${userHomeDir}/temp/${this.path}`)) {
+      fsPromises.mkdir(`${userHomeDir}/temp/${this.path}`, { recursive: true });
     }
   }
 
   public async messagesRead(name: string): Promise<any> {
     try {
       const buffed = (await fsPromises.readFile(
-        `temp/${this.path}/${name}.${this.extension}`
+        `${userHomeDir}/temp/${this.path}/${name}.${this.extension}`
       )) as unknown as string;
       let read: any;
       if (this.extension === "json") {
@@ -41,7 +44,7 @@ class Cache {
         stringify = data;
       }
       const write = await fsPromises.writeFile(
-        `temp/${this.path}/${name}.${this.extension}`,
+        `${userHomeDir}/temp/${this.path}/${name}.${this.extension}`,
         stringify
       );
       return write;

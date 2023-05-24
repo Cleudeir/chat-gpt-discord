@@ -2,6 +2,8 @@ import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import OpenAi from "../../openAi";
 import { Config, DataUser, Messages, model } from "../../types";
 import fs from "fs";
+import os from "os";
+const userHomeDir = os.homedir();
 async function htmlPage(body: any) {
   const message = `
   <body margin:0 padding:0>
@@ -32,7 +34,7 @@ async function htmlPage(body: any) {
   const user: string = "htmlPage";
   const data: DataUser = { messages, config };
   const result = await OpenAi.slow(user, message, data);
-  fs.writeFileSync("temp/site.html", result);
+  fs.writeFileSync(userHomeDir + "/temp/site.html", result);
   return result;
 }
 
